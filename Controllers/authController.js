@@ -67,16 +67,9 @@ exports.login = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-
-  console.log(req.body, req.pengguna);
-
   try {
     const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
-
-    // Pastikan ID pengguna yang ingin diperbarui sesuai dengan ID pengguna yang telah diotentikasi
-    if (req.pengguna.id_pengguna !== req.body.id_pengguna) {
-      return res.status(403).send({ message: "Forbidden: Unauthorized update" });
-    }
+    const userId = req.pengguna.id_pengguna;
 
     let hashedPassword;
     if (password) {
@@ -94,7 +87,7 @@ exports.updateProfile = async (req, res) => {
         username,
         ...(hashedPassword && { password: hashedPassword }), // Hanya update password jika ada
       },
-      { where: { id_pengguna: req.pengguna.id_pengguna } }
+      { where: { id_pengguna: userId } } // Gunakan userId langsung
     );
 
     if (updatedPengguna[0] === 0) {
@@ -106,6 +99,7 @@ exports.updateProfile = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
 
 
 
