@@ -66,34 +66,46 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.updateAccount = async (req, res) => {
+exports.updateProfile = async (req, res) => {
   try {
-    const { nama, 
-            nomor_telp, 
-            nomor_polisi, 
-            detail_kendaraan, 
-            email, 
-            username, 
-            password } = req.body;
+    const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
 
     // Pastikan ID pengguna yang ingin diperbarui sesuai dengan ID pengguna yang telah diotentikasi
     if (req.pengguna.id_pengguna !== req.body.id_pengguna) {
       return res.status(403).send({ message: "Forbidden: Unauthorized update" });
     }
 
+    // Hash password baru jika ada
+    let hashedPassword;
     if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      req.body.password = hashedPassword;
+      hashedPassword = await bcrypt.hash(password, 10);
     }
 
-    // Update informasi akun
-    await Pengguna.update(req.body, { where: { id_pengguna: req.pengguna.id_pengguna } });
+    // Update informasi profil pengguna
+    const updatedPengguna = await Pengguna.update(
+      {
+        nama,
+        nomor_telp,
+        nomor_polisi,
+        detail_kendaraan,
+        email,
+        username,
+        ...(hashedPassword && { password: hashedPassword }), // Hanya update password jika ada
+      },
+      { where: { id_pengguna: req.pengguna.id_pengguna } }
+    );
 
-    res.status(200).send({ message: "Account updated successfully" });
+    if (updatedPengguna[0] === 0) {
+      return res.status(404).send({ message: "User not found or no changes applied" });
+    }
+
+    res.status(200).send({ message: "Profile updated successfully" });
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
+
+
 
 
 

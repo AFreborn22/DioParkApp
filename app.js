@@ -1,12 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const { authenticateToken } = require('./midleware/authMidleware');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('./Controllers/authGoogleController'); 
 const authRoutes = require('./Routes/auth');
+const { authenticateToken } = require('./Midleware/authMidleware');
 const akunRoutes = require('./Routes/akun');
 
 const app = express();
@@ -47,10 +47,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/account', authenticateToken, akunRoutes);
+app.use('/api/profile', authenticateToken, akunRoutes);
 
 app.get('/', (req, res) => (
-    res.send("cepet jadi")
+    res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
 ));
 
 app.post('/add', (req, res) => {

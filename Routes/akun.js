@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../Controllers/authController');
-const { authenticateToken } = require('../midleware/authMidleware');
+const { authenticateToken } = require('../Midleware/authMidleware');
+const authController = require('../Controllers/authController'); 
 
-// Endpoint untuk update akun
-router.put('/update', authenticateToken, authController.updateAccount);
+// Endpoint untuk update profil
+router.put('/update', authenticateToken, authController.updateProfile);
 
 module.exports = router;

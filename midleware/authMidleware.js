@@ -1,28 +1,24 @@
 const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
-    const token = req.headers.authorization; 
-    if (!token) {
-        console.log("Token not found");
-        return res.status(401).send({ message: "Unauthorized" });
+    const tokenHeader = req.headers.authorization;
+    if (!tokenHeader || !tokenHeader.startsWith('Bearer ')) {
+        return res.status(401).send({ message: "Unauthorized: No token provided" });
     }
+
+    const token = tokenHeader.split(' ')[1];
+    console.log("Received Token:", token); // Log token yang diterima
 
     jwt.verify(token, 'secret_key', (err, decoded) => {
         if (err) {
-            console.log("Invalid token:", err.message);
-            return res.status(403).send({ message: "Invalid token" });
-        }
-        req.pengguna = decoded; 
-        console.log("Token verified:", decoded); 
-        
-        const idPengguna = decoded.id_pengguna;
-        if (!idPengguna) {
-            console.log("User ID not found in token");
-            return res.status(403).send({ message: "User ID not found in token" });
+            console.log("Token Verification Error:", err.message); // Log kesalahan verifikasi
+            return res.status(403).send({ message: "Forbidden: Invalid token" });
         }
 
+        req.pengguna = decoded;
         next();
     });
 };
+
 
 module.exports = { authenticateToken };
