@@ -67,6 +67,9 @@ exports.login = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
+
+  console.log(req.body, req.pengguna);
+
   try {
     const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
 
@@ -75,7 +78,6 @@ exports.updateProfile = async (req, res) => {
       return res.status(403).send({ message: "Forbidden: Unauthorized update" });
     }
 
-    // Hash password baru jika ada
     let hashedPassword;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
