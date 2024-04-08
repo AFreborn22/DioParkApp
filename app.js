@@ -11,6 +11,7 @@ const checkProfileCompletion = require('./Midleware/profileMidleware');
 const akunRoutes = require('./Routes/akun');
 const scanRoutes = require('./Routes/scan');
 const adminRoutes = require('./Routes/admin');
+const transaksiRoutes = require('./Routes/transaksi');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -53,6 +54,7 @@ app.use('/api/auth/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
+app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 
 app.get('/', (req, res) => (
     res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")

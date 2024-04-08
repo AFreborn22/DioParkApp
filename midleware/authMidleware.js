@@ -7,11 +7,11 @@ const authenticateToken = (req, res, next) => {
     }
 
     const token = tokenHeader.split(' ')[1];
-    console.log("Received Token:", token); // Log token yang diterima
+    console.log("Received Token:", token); 
 
     jwt.verify(token, 'secret_key', (err, decoded) => {
         if (err) {
-            console.log("Token Verification Error:", err.message); // Log kesalahan verifikasi
+            console.log("Token Verification Error:", err.message); 
             return res.status(403).send({ message: "Forbidden: Invalid token" });
         }
 
