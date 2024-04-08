@@ -10,29 +10,25 @@ const Transaksi = sequelize.define('transaksi_parkir', {
       primaryKey: true,
     },
     id_pengguna: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
         model : 'Pengguna',
         key : 'id_pengguna',
       },
     },
-    waktu_masuk: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false,
-    },
-    waktu_keluar: {
+    waktu_parkir: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         allowNull: false,
     },
     status: {
-        type: DataTypes.BOOL,
+        type: DataTypes.STRING,
         allowNull: false,
     },
   }, {
     freezeTableName: true,
+    timestamps: false,
   });
 
   Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
