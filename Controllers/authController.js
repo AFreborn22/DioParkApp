@@ -6,6 +6,13 @@ const Sequelize = require('sequelize');
 exports.register = async (req, res) => {
   try {
     const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
+    
+    // Periksa apakah email sudah terdaftar
+    const existingUser = await Pengguna.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).send({ message: "Email sudah terdaftar. Silakan gunakan email lain." });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const pengguna = await Pengguna.create({
       nama,
