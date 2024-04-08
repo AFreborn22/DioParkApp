@@ -10,6 +10,7 @@ const { authenticateToken } = require('./Midleware/authMidleware');
 const checkProfileCompletion = require('./Midleware/profileMidleware');
 const akunRoutes = require('./Routes/akun');
 const scanRoutes = require('./Routes/scan');
+const adminRoutes = require('./Routes/admin');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -48,6 +49,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/api/auth/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
