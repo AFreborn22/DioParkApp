@@ -13,8 +13,8 @@ const scanRoutes = require('./Routes/scan');
 const adminRoutes = require('./Routes/admin');
 const transaksiRoutes = require('./Routes/transaksi');
 const parkiranRoutes = require('./Routes/parkiran');  
+const getParkir = require('./Routes/getParkir')
 const { checkAdminAuth } = require('./Midleware/authAdmin');
-
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
@@ -58,6 +58,7 @@ app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 app.use('/api/admin/parkiran',checkAdminAuth, parkiranRoutes);
+app.use('/api/main', authenticateToken, getParkir)
 
 app.get('/', (req, res) => (
     res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")

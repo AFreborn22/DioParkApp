@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize("mysql://root@localhost:3306/parkingmonitoring")
 
+
 const Parkiran = sequelize.define('parkiran', {
     blok_parkir: {
       type: DataTypes.STRING,
@@ -23,6 +24,7 @@ const Parkiran = sequelize.define('parkiran', {
     freezeTableName: true,
     timestamps: false,
   });
+
   
 module.exports = Parkiran;
 
