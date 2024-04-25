@@ -4,7 +4,7 @@ exports.getAvailableParkir = async (req, res) => {
     try {
         const availableParkir = await Parkiran.findAll({
             where: {
-                status: 'Tersedia'
+                status: 'available'
             }
         });
 

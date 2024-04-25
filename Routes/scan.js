@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const scanController = require('../Controllers/scanController');
-const { authenticateToken } = require('../Midleware/authMidleware');
-const checkProfileCompletion = require('../Midleware/profileMidleware');
+const { authenticateToken } = require('../midleware/authMidleware');
+const checkProfileCompletion = require('../midleware/profileMidleware');
 
 // Rute untuk scan QR code masuk
 router.post('/scan-masuk', authenticateToken, checkProfileCompletion, (req, res) => {

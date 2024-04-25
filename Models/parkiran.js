@@ -17,8 +17,9 @@ const Parkiran = sequelize.define('parkiran', {
         allowNull: false,
     },
     status: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.ENUM('available', 'unavailable'), 
+      allowNull: false,
+      defaultValue: 'available'
     },
   }, {
     freezeTableName: true,

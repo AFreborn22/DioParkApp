@@ -12,8 +12,17 @@ async function getAllParkiran(req, res) {
 async function createParkiran(req, res) {
     try {
         const { blok_parkir, lantai, kendaraan, status } = req.body;
-        const newParkiran = await Parkiran.create({ blok_parkir, lantai, kendaraan, status });
-        res.status(201).json({message: 'Data parkiran berhasil ditambahkan', data:newParkiran});
+
+        // Cek apakah nilai "status" disertakan dalam permintaan
+        const parkiranData = { blok_parkir, lantai, kendaraan };
+        if (status) {
+            parkiranData.status = status;
+        }
+
+        // Buat objek Parkiran dengan data yang sesuai
+        const newParkiran = await Parkiran.create(parkiranData);
+
+        res.status(201).json({ message: 'Data parkiran berhasil ditambahkan', data: newParkiran });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -23,12 +32,21 @@ async function updateParkiran(req, res) {
     try {
         const { blok_parkir } = req.params;
         const { lantai, kendaraan, status } = req.body;
+
+        // Cek apakah data parkiran dengan blok_parkir tertentu ada dalam database
+        const existingParkiran = await Parkiran.findOne({ where: { blok_parkir } });
+        if (!existingParkiran) {
+            return res.status(404).json({ message: 'Data parkiran tidak ditemukan' });
+        }
+
+        // Update data parkiran dengan nilai yang diberikan
         const updatedParkiran = await Parkiran.update({ lantai, kendaraan, status }, {
             where: { blok_parkir },
         });
 
+        // Periksa apakah data berhasil diperbarui
         if (updatedParkiran[0] === 0) {
-            return res.status(404).json({ message: 'Data parkiran tidak ditemukan' });
+            return res.status(400).json({ message: 'Gagal memperbarui data parkiran' });
         }
 
         res.json({ message: 'Data parkiran berhasil diperbarui' });

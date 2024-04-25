@@ -6,15 +6,17 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('./Controllers/authGoogleController'); 
 const authRoutes = require('./Routes/auth');
-const { authenticateToken } = require('./Midleware/authMidleware');
-const checkProfileCompletion = require('./Midleware/profileMidleware');
+const { authenticateToken } = require('./midleware/authMidleware');
+const checkProfileCompletion = require('./midleware/profileMidleware');
 const akunRoutes = require('./Routes/akun');
 const scanRoutes = require('./Routes/scan');
 const adminRoutes = require('./Routes/admin');
 const transaksiRoutes = require('./Routes/transaksi');
 const parkiranRoutes = require('./Routes/parkiran');  
 const getParkir = require('./Routes/getParkir')
-const { checkAdminAuth } = require('./Midleware/authAdmin');
+const { checkAdminAuth } = require('./midleware/authAdmin');
+const generateQRoutes = require('./Routes/generateQR');
+
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
@@ -59,6 +61,7 @@ app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 app.use('/api/admin/parkiran',checkAdminAuth, parkiranRoutes);
 app.use('/api/main', authenticateToken, getParkir)
+app.use('/api/parkiran', authenticateToken, generateQRoutes);
 
 app.get('/', (req, res) => (
     res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
