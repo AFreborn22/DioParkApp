@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const parkiranController = require('../Controllers/manageParkir');
-const { checkAdminAuth } = require('../Midleware/authAdmin');
+const { checkAdminAuth } = require('../midleware/authAdmin');
 
 router.use(checkAdminAuth);
 
