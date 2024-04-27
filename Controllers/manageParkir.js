@@ -15,9 +15,29 @@ async function getAllParkiranRealtime(req, res) {
     }
 }
 
+async function getPenggunaByBlokParkir(req, res) {
+    const { blok_parkir } = req.params; // Ambil blok parkir dari parameter URL
+
+    try {
+        const penggunaParkir = await Parkiranrealtime.findOne({ where: { blok_parkir } });
+
+        if (!penggunaParkir) {
+            return res.status(404).json({ message: 'Pengguna yang parkir tidak ditemukan' });
+        }
+
+        res.json(penggunaParkir);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 async function getAllParkiran(req, res) {
     try {
-        const parkiran = await Parkiran.findAll();
+        const parkiran = await Parkiran.findAll({
+            where: {
+                status: 'available'
+            }
+        });;
         res.json(parkiran);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -86,4 +106,4 @@ async function deleteParkiran(req, res) {
 }
 
 
-module.exports = { getAllParkiranRealtime, getAllParkiran, createParkiran, updateParkiran, deleteParkiran };
+module.exports = { getAllParkiranRealtime, getAllParkiran, getPenggunaByBlokParkir, createParkiran, updateParkiran, deleteParkiran };
