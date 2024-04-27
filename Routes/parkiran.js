@@ -5,6 +5,7 @@ const { checkAdminAuth } = require('../midleware/authAdmin');
 
 router.use(checkAdminAuth);
 
+router.get('/realtime', parkiranController.getAllParkiranRealtime);
 router.get('/', parkiranController.getAllParkiran);
 router.post('/create', parkiranController.createParkiran);
 router.put('/:blok_parkir', parkiranController.updateParkiran);

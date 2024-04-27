@@ -1,4 +1,19 @@
 const Parkiran = require('../Models/parkiran');
+const Parkiranrealtime = require('../Models/parkiranrealtime');
+
+async function getAllParkiranRealtime(req, res) {
+    try {
+        const parkiranRealtime = await Parkiranrealtime.findAll();
+
+        if (parkiranRealtime.length === 0) {
+            return res.status(404).json({ message: 'Tidak ada pengguna yang parkir' });
+        }
+
+        res.json(parkiranRealtime);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 async function getAllParkiran(req, res) {
     try {
@@ -71,4 +86,4 @@ async function deleteParkiran(req, res) {
 }
 
 
-module.exports = { getAllParkiran, createParkiran, updateParkiran, deleteParkiran };
+module.exports = { getAllParkiranRealtime, getAllParkiran, createParkiran, updateParkiran, deleteParkiran };
