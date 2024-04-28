@@ -11,6 +11,8 @@ exports.adminLogin = async (req, res) => {
       }
   
       const token = jwt.sign({ username: admin.username, role: 'admin' }, 'secret_key', { expiresIn: '1h' });
+
+      res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
   
       res.status(200).send({ message: "Admin logged in successfully", token });
     } catch (error) {

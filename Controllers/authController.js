@@ -29,6 +29,8 @@ exports.register = async (req, res) => {
     const decodedToken = jwt.decode(token);
     console.log(decodedToken);
 
+    res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
+
     res.status(201).send({ message: "User registered successfully", pengguna, token });
   } catch (error) {
     res.status(500).send(error.message);
@@ -66,6 +68,8 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, 'secret_key', { expiresIn: '1h' });
     const decodedToken = jwt.decode(token);
     console.log(decodedToken);
+
+    res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
 
     res.status(200).send({ message: "Login successful", pengguna, token });
   } catch (error) {
