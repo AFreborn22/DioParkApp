@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
     res.status(201).send({ message: "User registered successfully", pengguna, token });
   } catch (error) {
     res.status(500).send(error.message);
-  }
+  }   
 };
 
 exports.login = async (req, res) => {

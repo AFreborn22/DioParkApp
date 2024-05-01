@@ -17,6 +17,8 @@ const getParkir = require('./Routes/getParkir')
 const { checkAdminAuth } = require('./midleware/authAdmin');
 const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar'); 
+const { login } = require('./Controllers/authController'); // Ubah sesuai dengan path file controller Anda
+
 
 
 const app = express();

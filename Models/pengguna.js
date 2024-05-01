@@ -28,13 +28,17 @@ const Pengguna = sequelize.define('pengguna', {
       allowNull: true,
     },
     nomor_polisi: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     detail_kendaraan: {
-        type: DataTypes.STRING,
-        allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
+    tokenResetPassword: {
+      type: DataTypes.STRING,
+      allowNull: true,
+  },
   }, {
     freezeTableName: true,
     timestamps: false,
