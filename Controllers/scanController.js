@@ -1,10 +1,12 @@
 const Transaksi = require('../Models/transaksi');
 const Parkiran = require('../Models/parkiran');
+const Pengguna = require('../Models/pengguna');
 const Parkiranrealtime = require('../Models/parkiranrealtime');
+const { transporter } = require('../helpers/transporter');
 
 async function scanMasukQRCode(req, res) {
-  const { id_pengguna } = req.pengguna; // Ambil ID pengguna dari token JWT
-  const { blok_parkir } = req.body; // Ambil blok parkir dari QR code yang dipindai
+  const { id_pengguna, email } = req.pengguna; 
+  const { blok_parkir } = req.body; 
 
   try {
     // Cari data parkiran sesuai dengan blok_parkir dari QR code
@@ -14,16 +16,38 @@ async function scanMasukQRCode(req, res) {
       return res.status(404).json({ error: 'Parkiran tidak tersedia atau QR code tidak valid' });
     }
 
-    // Ubah status parkiran dari available ke unavailable
     await Parkiran.update({ status: 'unavailable' }, { where: { blok_parkir } });
+    const pengguna = await Pengguna.findByPk(id_pengguna);
+
+    if (!pengguna) {
+      return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
+    }
 
     // Buat transaksi masuk
-    const waktu_parkir = new Date();
+    const waktu_parkir = new Date().toLocaleString(); 
     const status = 'masuk';
     const transaksi = await Transaksi.create({ id_pengguna, waktu_parkir, status, blok_parkir });
-    const parkiranrealtime = await Parkiranrealtime.create({ id_pengguna, blok_parkir, id_transaksi: transaksi.id_transaksi })
+    const parkiranrealtime = await Parkiranrealtime.create({ id_pengguna, blok_parkir, id_transaksi: transaksi.id_transaksi });
 
-    res.status(200).json({transaksi, parkiranrealtime});
+    await transporter.sendMail({
+      from: 'dioparkApp',
+      to: email,
+      subject: 'Diopark App - Invoice Scan In',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #333;">Invoice Scan In Diopark</h1>
+          <p style="font-size: 16px;">Nama               : ${pengguna.nama}</p>
+          <p style="font-size: 16px;">Nomor Polisi       : ${pengguna.nomor_polisi}</p>
+          <p style="font-size: 16px;">Detail Kendaraan   : ${pengguna.detail_kendaraan}</p>
+          <p style="font-size: 16px;">Waktu Parkir       : ${waktu_parkir}</p>
+          <p style="font-size: 16px;">Status             : ${status}</p>
+          <p style="font-size: 16px;">Blok parkir        : ${blok_parkir}</p>
+          <p style="font-size: 12px; color: #777; margin-top: 20px;">Jangan Lupa Scan untuk keluar</p>
+        </div>
+      `,
+    });
+
+    res.status(200).json({ transaksi, parkiranrealtime });
   } catch (error) {
     console.error('Error saat memproses pemindaian QR code masuk:', error);
     res.status(500).json({ error: 'Gagal memproses pemindaian QR code masuk' });
@@ -31,27 +55,48 @@ async function scanMasukQRCode(req, res) {
 }
 
 async function scanKeluarQRCode(req, res) {
-  const { id_pengguna } = req.pengguna; // Ambil ID pengguna dari token JWT
-  const { blok_parkir } = req.body; // Ambil blok parkir dari QR code yang dipindai
+  const { id_pengguna, email } = req.pengguna; 
+  const { blok_parkir } = req.body; 
 
   try {
     // Cari data parkiran sesuai dengan blok_parkir dari QR code
     const parkiran = await Parkiran.findOne({ where: { blok_parkir, status: 'unavailable' } });
 
     if (!parkiran) {
-      return res.status(404).json({ error: 'Parkiran tidak ditemukan atau QR code tidak valid' });
+      return res.status(404).json({ error: 'Parkiran tidak tersedia atau QR code tidak valid' });
     }
 
-    // Ubah status parkiran dari unavailable ke available
     await Parkiran.update({ status: 'available' }, { where: { blok_parkir } });
+    const pengguna = await Pengguna.findByPk(id_pengguna);
 
-    // Buat transaksi keluar
-    const waktu_parkir = new Date();
+    if (!pengguna) {
+      return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
+    }
+
+    // Buat transaksi masuk
+    const waktu_parkir = new Date().toLocaleString(); 
     const status = 'keluar';
     const transaksi = await Transaksi.create({ id_pengguna, waktu_parkir, status, blok_parkir });
-
-    // Hapus data dari tabel Parkiranrealtime
     await Parkiranrealtime.destroy({ where: { id_pengguna, blok_parkir } });
+
+    await transporter.sendMail({
+      from: 'dioparkApp',
+      to: email,
+      subject: 'Diopark App - Invoice Scan out',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #333;">Invoice Scan In Diopark</h1>
+          <p style="font-size: 16px;">Nama               : ${pengguna.nama}</p>
+          <p style="font-size: 16px;">Nomor Polisi       : ${pengguna.nomor_polisi}</p>
+          <p style="font-size: 16px;">Detail Kendaraan   : ${pengguna.detail_kendaraan}</p>
+          <p style="font-size: 16px;">Waktu Parkir       : ${waktu_parkir}</p>
+          <p style="font-size: 16px;">Status             : ${status}</p>
+          <p style="font-size: 16px;">Blok parkir        : ${blok_parkir}</p>
+          <p style="font-size: 12px; color: #777; margin-top: 20px;">Terimakasih dan Selamat jalan</p>
+        </div>
+      `,
+    });
+
 
     res.status(200).json(transaksi);
   } catch (error) {

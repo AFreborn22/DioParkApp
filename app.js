@@ -73,12 +73,6 @@ app.get('/', (req, res) => (
     res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
 ));
 
-app.post('/add', (req, res) => {
-    res.json({
-        message: "woyyy",
-    });
-});
-
 app.listen(port, () => {
     console.log(`jalan di ${port}`);
 });
