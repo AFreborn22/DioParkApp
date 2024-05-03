@@ -47,10 +47,12 @@ exports.login = async (req, res) => {
 
     const pengguna = await Pengguna.findOne({
       where: whereCondition
+    }).catch(error => {
+      return res.status(500).send({ message: "Internal server error", error: error.message });
     });
 
     if (!pengguna) {
-      return res.status(404).send({ message: "User not found" });
+      return res.status(404).send({ message: "User not found"});
     }
 
     const match = await bcrypt.compare(password, pengguna.password);
