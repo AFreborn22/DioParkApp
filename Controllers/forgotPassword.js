@@ -23,7 +23,7 @@ exports.forgotPassword = async (req, res) => {
       await transporter.sendMail({
         from: 'dioparkApp',
         to: email,
-        subject: 'Reset Password',
+        subject: 'Reset Password account dioparkApp ',
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
             <h1 style="color: #333;">Diopark App</h1>
