@@ -19,11 +19,25 @@ const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar'); 
 const forgotPassword = require('./Routes/forgot');
 
-
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require('cors');
 
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(session({
+    secret: process.env.GOOGLE_CLIENT_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Database Connection
 const sequelize = new Sequelize({
     dialect: 'mysql',
     username: process.env.DB_USERNAME || 'root',
@@ -32,7 +46,6 @@ const sequelize = new Sequelize({
     port: process.env.DB_PORT || 3306,
     database: process.env.DB_NAME || 'parkingmonitoring',
 });
-
 sequelize
     .authenticate()
     .then(() => {
@@ -42,20 +55,10 @@ sequelize
         console.error('Unable to connect to the database:', err);
     });
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Konfigurasi session
-app.use(session({
-    secret: process.env.GOOGLE_CLIENT_SECRET,
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// Routes
+app.get('/', (req, res) => (
+    res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
+));
 
 app.use('/api/auth/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
@@ -64,15 +67,10 @@ app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 app.use('/api/main', authenticateToken, getParkir)
-app.use('/api/admin/parkiran',checkAdminAuth, parkiranRoutes);
+app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
 
-
-app.get('/', (req, res) => (
-    res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
-));
-
 app.listen(port, () => {
-    console.log(`jalan di ${port}`);
+    console.log(`Berjalan di port ${port}`);
 });
