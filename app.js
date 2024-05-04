@@ -40,11 +40,11 @@ app.use(passport.session());
 // Database Connection
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    username: process.env.DB_USERNAME || 'root',
+    username: process.env.DB_USERNAME ,
     password: '',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
-    database: process.env.DB_NAME || 'parkingmonitoring',
+    host: process.env.DB_HOST ,
+    port: process.env.DB_PORT ,
+    database: process.env.DB_NAME ,
 });
 sequelize
     .authenticate()
