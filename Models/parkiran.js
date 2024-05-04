@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize("mysql://root@localhost:3306/parkingmonitoring")
+const sequelize = new Sequelize(process.env.MYSQL_URL)
 
 
 const Parkiran = sequelize.define('parkiran', {
