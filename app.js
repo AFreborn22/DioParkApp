@@ -67,7 +67,7 @@ app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 app.use('/api/main', authenticateToken, getParkir)
-app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
+app.use('/api/admin/parkiran',  parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
 
