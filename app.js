@@ -4,7 +4,7 @@ const session = require('express-session');
 const { Sequelize } = require('sequelize');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const passport = require('./Controllers/authGoogleController'); 
+const passport = require('./Controllers/authGoogleController');     
 const authRoutes = require('./Routes/auth');
 const { authenticateToken } = require('./midleware/authMidleware');
 const checkProfileCompletion = require('./midleware/profileMidleware');
@@ -57,7 +57,7 @@ sequelize
 
 // Routes
 app.get('/', (req, res) => (
-    res.send("五条悟だから最強なのか、それとも五条悟が最強なのか。")
+    res.send("Faishal Balikan? eh serius ? ga bercanda kan?")
 ));
 
 app.use('/api/auth/admin', adminRoutes);
