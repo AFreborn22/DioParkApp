@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
     });
 
     if (!pengguna) {
-      return res.status(404).send({ message: "User not found"});
+      return res.status(404).send({ message: "User not found" });
     }
 
     const match = await bcrypt.compare(password, pengguna.password);
@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
 
     res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
 
-    res.status(200).send({ message: "Login successful", pengguna, token });
+    res.status(200).redirect('https://diopark.vercel.app/dashboard');
   } catch (error) {
     res.status(500).send(error.message);
   }
