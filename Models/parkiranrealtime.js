@@ -21,7 +21,7 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
       },
     },
     blok_parkir: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
         model : 'parkiran',
@@ -45,7 +45,7 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
   Pengguna.hasMany(Pakiranrealtime, { foreignKey: 'id_pengguna' });
   Pakiranrealtime.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });
   Parkiran.hasMany(Pakiranrealtime, { foreignKey: 'blok_parkir' });
-  Pakiranrealtime.belongsTo(Transaksi, { foreignKey: 'id_transaksi' }); // Perbaikan disini
-  Transaksi.hasMany(Pakiranrealtime, { foreignKey: 'id_transaksi' }); // Perbaikan disini
+  Pakiranrealtime.belongsTo(Transaksi, { foreignKey: 'id_transaksi' }); 
+  Transaksi.hasMany(Pakiranrealtime, { foreignKey: 'id_transaksi' }); 
   
 module.exports = Pakiranrealtime;
