@@ -20,7 +20,7 @@ const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT
 const cors = require('cors');
 
 // Middleware
@@ -37,23 +37,23 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Database Connection
-const sequelize = new Sequelize({
-    dialect: 'mysql',
-    username: process.env.DB_USERNAME ,
-    password: process.env.DB_PASSWORD ,
-    host: process.env.DB_HOST ,
-    port: process.env.DB_PORT ,
-    database: process.env.DB_NAME ,
-});
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection to the database has been established successfully.');
-    })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err);
-    });
+// // Database Connection
+// const sequelize = new Sequelize({
+//     dialect: 'mysql',
+//     username: process.env.DB_USERNAME ,
+//     password: process.env.DB_PASSWORD ,
+//     host: process.env.DB_HOST ,
+//     port: process.env.DB_PORT ,
+//     database: process.env.DB_NAME ,
+// });
+// sequelize
+//     .authenticate()
+//     .then(() => {
+//         console.log('Connection to the database has been established successfully.');
+//     })
+//     .catch((err) => {
+//         console.error('Unable to connect to the database:', err);
+//     });
 
 // Routes
 app.get('/', (req, res) => (
