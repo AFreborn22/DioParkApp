@@ -33,48 +33,17 @@ async function scanMasukQRCode(req, res) {
       from: 'dioparkApp',
       to: email,
       subject: 'Diopark App - Invoice Scan In',
-      html:  `
-      <html>
-      <head>
-          <style>
-              body {
-                  font-family: Arial, sans-serif;
-                  max-width: 600px;
-                  margin: 0 auto;
-                  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                  padding: 20px;
-              }
-              h1 {
-                  color: #333;
-                  font-size: 24px;
-                  margin-bottom: 20px;
-              }
-              p {
-                  font-size: 16px;
-                  margin-bottom: 10px;
-              }
-              .footer {
-                  font-size: 12px;
-                  color: #777;
-                  margin-top: 20px;
-              }
-          </style>
-      </head>
-      <body>
-          <div>
-              <h1>Invoice Scan In Diopark</h1>
-              <p><strong>Nama:</strong> ${pengguna.nama}</p>
-              <p><strong>Nomor Polisi:</strong> ${pengguna.nomor_polisi}</p>
-              <p><strong>Detail Kendaraan:</strong> ${pengguna.detail_kendaraan}</p>
-              <p><strong>Waktu Parkir:</strong> ${waktu_parkir}</p>
-              <p><strong>Status:</strong> ${status}</p>
-              <p><strong>Blok parkir:</strong> ${blok_parkir}</p>
-          </div>
-          <div class="footer">
-              <p>Terimakasih dan Selamat jalan</p>
-          </div>
-      </body>
-      </html>  
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #333;">Invoice Scan In Diopark</h1>
+          <p style="font-size: 16px;">Nama               : ${pengguna.nama}</p>
+          <p style="font-size: 16px;">Nomor Polisi       : ${pengguna.nomor_polisi}</p>
+          <p style="font-size: 16px;">Detail Kendaraan   : ${pengguna.detail_kendaraan}</p>
+          <p style="font-size: 16px;">Waktu Parkir       : ${waktu_parkir}</p>
+          <p style="font-size: 16px;">Status             : ${status}</p>
+          <p style="font-size: 16px;">Blok parkir        : ${blok_parkir}</p>
+          <p style="font-size: 12px; color: #777; margin-top: 20px;">Jangan Lupa Scan untuk keluar</p>
+        </div>
       `,
     });
 
@@ -115,47 +84,16 @@ async function scanKeluarQRCode(req, res) {
       to: email,
       subject: 'Diopark App - Invoice Scan out',
       html: `
-      <html>
-      <head>
-          <style>
-              body {
-                  font-family: Arial, sans-serif;
-                  max-width: 600px;
-                  margin: 0 auto;
-                  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                  padding: 20px;
-              }
-              h1 {
-                  color: #333;
-                  font-size: 24px;
-                  margin-bottom: 20px;
-              }
-              p {
-                  font-size: 16px;
-                  margin-bottom: 10px;
-              }
-              .footer {
-                  font-size: 12px;
-                  color: #777;
-                  margin-top: 20px;
-              }
-          </style>
-      </head>
-      <body>
-          <div>
-              <h1>Invoice Scan In Diopark</h1>
-              <p><strong>Nama:</strong> ${pengguna.nama}</p>
-              <p><strong>Nomor Polisi:</strong> ${pengguna.nomor_polisi}</p>
-              <p><strong>Detail Kendaraan:</strong> ${pengguna.detail_kendaraan}</p>
-              <p><strong>Waktu Parkir:</strong> ${waktu_parkir}</p>
-              <p><strong>Status:</strong> ${status}</p>
-              <p><strong>Blok parkir:</strong> ${blok_parkir}</p>
-          </div>
-          <div class="footer">
-              <p>Terimakasih dan Selamat jalan</p>
-          </div>
-      </body>
-      </html>  
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #333;">Invoice Scan In Diopark</h1>
+          <p style="font-size: 16px;">Nama               : ${pengguna.nama}</p>
+          <p style="font-size: 16px;">Nomor Polisi       : ${pengguna.nomor_polisi}</p>
+          <p style="font-size: 16px;">Detail Kendaraan   : ${pengguna.detail_kendaraan}</p>
+          <p style="font-size: 16px;">Waktu Parkir       : ${waktu_parkir}</p>
+          <p style="font-size: 16px;">Status             : ${status}</p>
+          <p style="font-size: 16px;">Blok parkir        : ${blok_parkir}</p>
+          <p style="font-size: 12px; color: #777; margin-top: 20px;">Terimakasih dan Selamat jalan</p>
+        </div>
       `,
     });
 
