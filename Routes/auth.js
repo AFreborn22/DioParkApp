@@ -1,7 +1,7 @@
 // routes/auth.js
 const express = require('express');
 const passport = require('passport');
-const authController = require('../controllers/authController'); // Pastikan pathnya sesuai dengan struktur proyek Anda
+const authController = require('../Controllers/authController'); 
 const router = express.Router();
 
 router.post('/register', authController.register);
