@@ -24,9 +24,9 @@ passport.use(new GoogleStrategy({
         });
       }
 
-      const token = generateToken(pengguna); // Generate JWT token
-      pengguna.token = token; // Store token in pengguna object
-      await pengguna.save(); // Save pengguna with token
+      const token = generateToken(pengguna); 
+      pengguna.token = token; 
+      await pengguna.save(); 
 
       return done(null, pengguna);
     } catch (error) {
