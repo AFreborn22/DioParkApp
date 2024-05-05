@@ -91,9 +91,9 @@ exports.updateProfile = async (req, res) => {
         detail_kendaraan,
         email,
         username,
-        ...(hashedPassword && { password: hashedPassword }), // Hanya update password jika ada
+        ...(hashedPassword && { password: hashedPassword }), 
       },
-      { where: { id_pengguna: userId } } // Gunakan userId langsung
+      { where: { id_pengguna: userId } } 
     );
 
     if (updatedPengguna[0] === 0) {
