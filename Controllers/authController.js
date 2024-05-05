@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).send({ message: "User registered successfully", pengguna });
+    res.status(201).send({ message: "Pengguna berhasil terdaftar", pengguna });
   } catch (error) {
     res.status(500).send(error.message);
   }   
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username && !email) {
-      return res.status(400).send({ message: "Username or email is required" });
+      return res.status(400).send({ message: "Diperlukan nama pengguna atau email" });
     }
 
     const whereCondition = {};
@@ -48,16 +48,16 @@ exports.login = async (req, res) => {
     const pengguna = await Pengguna.findOne({
       where: whereCondition
     }).catch(error => {
-      return res.status(500).send({ message: "Internal server error", error: error.message });
+      return res.status(500).send({ message: "Server sedang gangguan", error: error.message });
     });
 
     if (!pengguna) {
-      return res.status(404).send({ message: "User not found" });
+      return res.status(404).send({ message: "Pengguna tidak di temukan" });
     }
 
     const match = await bcrypt.compare(password, pengguna.password);
     if (!match) {
-      return res.status(401).send({ message: "Incorrect password" });
+      return res.status(401).send({ message: "Kata sandi salah" });
     }
 
     const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, 'secret_key', { expiresIn: '1h' });
@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
 
     res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
 
-    res.status(200).send({ message: "Login successful", pengguna, token });
+    res.status(200).send({ message: "Login berhasil", pengguna, token });
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -97,10 +97,10 @@ exports.updateProfile = async (req, res) => {
     );
 
     if (updatedPengguna[0] === 0) {
-      return res.status(404).send({ message: "User not found or no changes applied" });
+      return res.status(404).send({ message: "Pengguna tidak ditemukan atau tidak ada perubahan yang diterapkan" });
     }
 
-    res.status(200).send({ message: "Profile updated successfully" });
+    res.status(200).send({ message: "Profil berhasil di ubah" });
   } catch (error) {
     res.status(500).send(error.message);
   }

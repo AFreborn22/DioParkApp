@@ -9,7 +9,7 @@ exports.forgotPassword = async (req, res) => {
       const pengguna = await Pengguna.findOne({ where: { email } });
   
       if (!pengguna) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ error: 'Pengguna tidak ditemukan' });
       }
   
       // buatin token buat reset password
@@ -34,10 +34,10 @@ exports.forgotPassword = async (req, res) => {
       `,
       });
   
-      return res.status(200).json({ message: 'Reset link sent to your email' });
+      return res.status(200).json({ message: 'Tautan reset sudah dikirim ke email Anda' });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Server sedang gangguan' });
     }
 };
 
@@ -51,7 +51,7 @@ exports.resetPassword = async (req, res) => {
       const pengguna = await Pengguna.findByPk(decodedToken.id_pengguna);
   
       if (!pengguna) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ error: 'Pengguna tidak di temukan' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -61,9 +61,9 @@ exports.resetPassword = async (req, res) => {
       pengguna.tokenResetPassword = null;
       await pengguna.save();
   
-      return res.status(200).json({ message: 'Password reset successfully' });
+      return res.status(200).json({ message: 'Berhasil mengatur ulang kata sandi' });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Server sedang gangguan' });
     }
   };

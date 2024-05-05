@@ -14,7 +14,7 @@ exports.getAvailableParkirMotor = async (req, res) => {
         res.json({ availableParkir: availableParkir, jumlahParkirTersedia: countAvailableParkir });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server sedang gangguan' });
     }
 };
 
@@ -32,6 +32,6 @@ exports.getAvailableParkirMobil = async (req, res) => {
         res.json({ availableParkir: availableParkir, jumlahParkirTersedia: countAvailableParkir });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ message: 'Server Error' });
+        res.status(500).json({ message: 'Server sedang gangguan' });
     }
 };
