@@ -46,7 +46,6 @@ exports.resetPassword = async (req, res) => {
       const { password } = req.body;
       const resetToken = req.query.token;
       
-      // validasi token (JWT)
       const decodedToken = jwt.verify(resetToken, 'your_secret_key');
   
       const pengguna = await Pengguna.findByPk(decodedToken.id_pengguna);
