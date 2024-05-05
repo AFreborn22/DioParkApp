@@ -9,34 +9,35 @@ function generateToken(pengguna) {
 }
 
 passport.use(new GoogleStrategy({
-  name: 'diopark Web client',
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://dioparkapp-production.up.railway.app/api/auth/google/callback'
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    let pengguna = await Pengguna.findOne({ where: { email: profile.emails[0].value } });
-    if (!pengguna) {
-      pengguna = await Pengguna.create({
-        username: profile.displayName,
-        email: profile.emails[0].value,
-      });
+    name: 'diopark Web client',
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/api/auth/google/callback'
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      // Cek apakah user dengan email Google sudah terdaftar
+      let pengguna = await Pengguna.findOne({ where: { email: profile.emails[0].value } });
+      if (!pengguna) {
+        // Jika belum terdaftar, buat pengguna baru
+        pengguna = await Pengguna.create({
+          username: profile.displayName,
+          email: profile.emails[0].value,
+        });
+      }
+
+      if (!pengguna.token) {
+        pengguna.token = generateToken(pengguna);
+        await pengguna.save();
+      }
+
+      // Kirim token JWT kepada klien
+      return done(null, pengguna);
+    } catch (error) {
+      return done(error);
     }
-
-    if (!pengguna.token) {
-      pengguna.token = generateToken(pengguna);
-      await pengguna.save();
-    }
-
-    // Tambahkan token ke objek pengguna
-    pengguna.token = generateToken(pengguna); // Di sini Anda menghasilkan token lagi untuk pengguna
-    await pengguna.save();
-
-    return done(null, pengguna);
-  } catch (error) {
-    return done(error);
   }
-}));
+));
 
 passport.serializeUser((pengguna, done) => {
   done(null, pengguna.email);
@@ -47,14 +48,8 @@ passport.deserializeUser(async (email, done) => {
     const pengguna = await Pengguna.findOne({ where: { email } });
     done(null, pengguna);
   } catch (error) {
-    done(error);    
+    done(error);
   }
 });
 
-exports.googleAuthCallback = (req, res) => {
-  // Di sini Anda dapat mengakses token dari req.user.token atau sesuai dengan cara Passport.js Anda menyimpannya
-  const token = req.user.token;
-  // Kirim token sebagai respons ke front end
-  res.cookie('jwt', token, { httpOnly: true });
-  res.redirect('https://diopark.vercel.app/dashboard');
-};
+module.exports = passport;
