@@ -12,7 +12,7 @@ passport.use(new GoogleStrategy({
     name: 'diopark Web client',
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/api/auth/google/callback'
+    callbackURL: 'https://dioparkapp-production.up.railway.app/google/callback'
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
@@ -24,10 +24,9 @@ passport.use(new GoogleStrategy({
         });
       }
 
-      if (!pengguna.token) {
-        pengguna.token = generateToken(pengguna);
-        await pengguna.save();
-      }
+      const token = generateToken(pengguna); // Generate JWT token
+      pengguna.token = token; // Store token in pengguna object
+      await pengguna.save(); // Save pengguna with token
 
       return done(null, pengguna);
     } catch (error) {
