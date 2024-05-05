@@ -13,10 +13,10 @@ exports.forgotPassword = async (req, res) => {
       }
   
       // buatin token buat reset password
-      const resetToken = jwt.sign({ id_pengguna: pengguna.id_pengguna }, 'your_secret_key', { expiresIn: '1h' });
+      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna }, 'your_secret_key', { expiresIn: '1h' });
   
       //simpen token nya ke db
-      pengguna.tokenResetPassword = resetToken;
+      pengguna.tokenResetPassword = token;
       await pengguna.save();
   
       // kirim email nya
@@ -28,7 +28,7 @@ exports.forgotPassword = async (req, res) => {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
             <h1 style="color: #333;">Diopark App</h1>
             <p style="font-size: 16px;">Anda telah meminta pengaturan ulang kata sandi. Klik tombol di bawah ini untuk mengatur ulang kata sandi Anda:</p>
-            <a href="${process.env.CLIENT_URL}/api/password/reset-password?token=${resetToken}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Reset Password</a>
+            <a href="${process.env.CLIENT_URL}/updatepassword?token=${token}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Reset Password</a>
             <p style="font-size: 12px; color: #777; margin-top: 20px;">Jika Anda tidak meminta hal ini, Anda dapat mengabaikan email ini.</p>
         </div>
       `,
@@ -44,9 +44,9 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
     try {
       const { password } = req.body;
-      const resetToken = req.query.token;
+      const token = req.query.token;
       
-      const decodedToken = jwt.verify(resetToken, 'your_secret_key');
+      const decodedToken = jwt.verify(token, 'secret_key');
   
       const pengguna = await Pengguna.findByPk(decodedToken.id_pengguna);
   
