@@ -26,6 +26,8 @@ passport.use(new GoogleStrategy({
     if (!pengguna.token) {
       pengguna.token = generateToken(pengguna);
       await pengguna.save();
+
+      res.cookie('jwt', pengguna.token, { httpOnly: true });
     }
 
     return done(null, pengguna);
