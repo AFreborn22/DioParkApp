@@ -17,7 +17,7 @@ router.get('/google/callback',
     
     const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, 'secret_key', { expiresIn: '1h' });
     res.cookie('jwt', token, { httpOnly: true }); 
-    res.status(200).json({ token }); 
+    res.status(200); 
   }
 );
 
