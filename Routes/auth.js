@@ -14,11 +14,20 @@ router.get('/google',
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    // Jika autentikasi sukses, kirim token JWT kepada klien
-    const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, 'secret_key', { expiresIn: '1h' });
-    res.cookie('jwt', token, { httpOnly: true }); // Simpan token dalam cookie untuk digunakan pada setiap permintaan
-    res.redirect('https://diopark.vercel.app/dashboard'); 
+    try {
+      if (!req.user) {
+        throw new Error('User not authenticated.');
+      }
+      // Jika autentikasi sukses, kirim token JWT kepada klien
+      const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, 'secret_key', { expiresIn: '1h' });
+      res.cookie('jwt', token, { httpOnly: true }); // Simpan token dalam cookie untuk digunakan pada setiap permintaan
+      res.redirect('https://diopark.vercel.app/dashboard'); 
+    } catch (error) {
+      console.error('Google authentication error:', error);
+      res.status(500).json({ error: 'Google authentication failed.' });
+    }
   }
 );
+
 
 module.exports = router;

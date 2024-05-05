@@ -16,10 +16,8 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      // Cek apakah user dengan email Google sudah terdaftar
       let pengguna = await Pengguna.findOne({ where: { email: profile.emails[0].value } });
       if (!pengguna) {
-        // Jika belum terdaftar, buat pengguna baru
         pengguna = await Pengguna.create({
           username: profile.displayName,
           email: profile.emails[0].value,
@@ -31,10 +29,9 @@ passport.use(new GoogleStrategy({
         await pengguna.save();
       }
 
-      // Kirim token JWT kepada klien
       return done(null, pengguna);
     } catch (error) {
-      return done(error);
+      return done(error); 
     }
   }
 ));
