@@ -108,16 +108,16 @@ exports.updateProfile = async (req, res) => {
 
 exports.getDataUser = async (req, res) => {
 
-  const userId = req.user.id_pengguna;
+  const userId = req.pengguna.id_pengguna;
 
   try {
-    const user = await Pengguna.findByPk(userId); 
+    const pengguna = await Pengguna.findByPk(userId); 
 
-    if (!user) {
+    if (!pengguna) {
       return res.status(404).json({ error: 'Data pengguna tidak ditemukan.' });
     }
 
-    res.status(200).json({ user });
+    res.status(200).json({ pengguna });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Terjadi kesalahan saat mengambil data pengguna.' });
