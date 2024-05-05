@@ -4,6 +4,6 @@ const { authenticateToken } = require('../midleware/authMidleware');
 const authController = require('../Controllers/authController'); 
 
 router.put('/update', authenticateToken, authController.updateProfile);
-router.put('/profile', authenticateToken, authController.getDataUser);
+router.put('/show', authenticateToken, authController.getDataUser);
 
 module.exports = router;
