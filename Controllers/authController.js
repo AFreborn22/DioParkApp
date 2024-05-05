@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
 
     res.cookie('token', token, { maxAge: 3600000, httpOnly: true });
 
-    res.status(200)
+    res.status(200).send({ message: "Login successful", pengguna, token });
   } catch (error) {
     res.status(500).send(error.message);
   }
