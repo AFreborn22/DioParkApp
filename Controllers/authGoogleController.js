@@ -28,6 +28,10 @@ passport.use(new GoogleStrategy({
       await pengguna.save();
     }
 
+    // Tambahkan token ke objek pengguna
+    pengguna.token = generateToken(pengguna); // Di sini Anda menghasilkan token lagi untuk pengguna
+    await pengguna.save();
+
     return done(null, pengguna);
   } catch (error) {
     return done(error);
@@ -48,6 +52,9 @@ passport.deserializeUser(async (email, done) => {
 });
 
 exports.googleAuthCallback = (req, res) => {
-  res.cookie('jwt', req.user.token, { httpOnly: true });
-  res.status(200).json({ message: 'Google authentication successful!' });
+  // Di sini Anda dapat mengakses token dari req.user.token atau sesuai dengan cara Passport.js Anda menyimpannya
+  const token = req.user.token;
+  // Kirim token sebagai respons ke front end
+  res.cookie('jwt', token, { httpOnly: true });
+  res.redirect('https://diopark.vercel.app/dashboard');
 };
