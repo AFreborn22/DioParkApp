@@ -12,25 +12,29 @@ passport.use(new GoogleStrategy({
     name: 'diopark Web client',
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://dioparkapp-production.up.railway.app/google/callback'
+    callbackURL: process.env.CALLBACK_URL
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
+      // Cek apakah user dengan email Google sudah terdaftar
       let pengguna = await Pengguna.findOne({ where: { email: profile.emails[0].value } });
       if (!pengguna) {
+        // Jika belum terdaftar, buat pengguna baru
         pengguna = await Pengguna.create({
           username: profile.displayName,
           email: profile.emails[0].value,
         });
       }
 
-      const token = generateToken(pengguna); 
-      pengguna.token = token; 
-      await pengguna.save(); 
+      if (!pengguna.token) {
+        pengguna.token = generateToken(pengguna);
+        await pengguna.save();
+      }
 
+      // Kirim token JWT kepada klien
       return done(null, pengguna);
     } catch (error) {
-      return done(error); 
+      return done(error);
     }
   }
 ));
