@@ -26,9 +26,6 @@ passport.use(new GoogleStrategy({
     if (!pengguna.token) {
       pengguna.token = generateToken(pengguna);
       await pengguna.save();
-
-      // Set cookies with JWT token
-      res.cookie('jwt', pengguna.token, { httpOnly: true }); // Setelah token JWT berhasil dibuat, simpan di cookies
     }
 
     return done(null, pengguna);
@@ -51,5 +48,6 @@ passport.deserializeUser(async (email, done) => {
 });
 
 exports.googleAuthCallback = (req, res) => {
-  res.redirect(`https://diopark.vercel.app/dashboard?token=${req.user.token}`);
+  res.cookie('jwt', req.user.token, { httpOnly: true });
+  res.status(200).json({ message: 'Google authentication successful!' });
 };
