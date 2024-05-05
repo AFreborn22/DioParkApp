@@ -17,7 +17,7 @@ router.get('/google/callback',
     // Jika autentikasi sukses, kirim token JWT kepada klien
     const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, 'secret_key', { expiresIn: '1h' });
     res.cookie('jwt', token, { httpOnly: true }); // Simpan token dalam cookie untuk digunakan pada setiap permintaan
-    res.redirect('/https://diopark.vercel.app/dashboard'); // Redirect ke halaman dashboard setelah autentikasi sukses
+    res.redirect('/dashboard'); // Redirect ke halaman dashboard setelah autentikasi sukses
   }
 );
 
