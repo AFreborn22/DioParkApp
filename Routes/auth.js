@@ -18,7 +18,7 @@ router.get('/google/callback',
 
     const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
-    res.redirect('${process.env.CLIENT_URL}/dashboard');
+    res.redirect('https://diopark.vercel.app//dashboard');
   }
 );
 
