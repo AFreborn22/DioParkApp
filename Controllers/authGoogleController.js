@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Pengguna = require('../Models/pengguna');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 passport.use(new GoogleStrategy({
     name: 'diopark app',
@@ -49,7 +50,7 @@ const googleCallbackHandler = (req, res, next) => {
     }
 
     try {
-      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, { expiresIn: '1h' });
+      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
