@@ -42,7 +42,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 const googleCallbackHandler = (req, res, next) => {
-  passport.authenticate('google', { failureRedirect: '/login' }, (err, pengguna) => {
+  passport.authenticate('google', { failureRedirect: '/login', }, (err, pengguna) => {
     if (err) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
