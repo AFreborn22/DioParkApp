@@ -1,12 +1,6 @@
-const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Pengguna = require('../Models/pengguna');
-
-function generateToken(pengguna) {
-  const token = jwt.sign({ id: pengguna.id, email: pengguna.email }, 'secret_key', { expiresIn: '1h' });
-  return token;
-}
 
 passport.use(new GoogleStrategy({
     name: 'diopark Web client',
@@ -26,12 +20,6 @@ passport.use(new GoogleStrategy({
         });
       }
 
-      if (!pengguna.token) {
-        pengguna.token = generateToken(pengguna);
-        await pengguna.save();
-      }
-
-      // Kirim token JWT kepada klien
       return done(null, pengguna);
     } catch (error) {
       return done(error);
