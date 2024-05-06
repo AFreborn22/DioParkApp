@@ -47,7 +47,7 @@ const googleCallbackHandler = (req, res, next) => {
     }
     if (!pengguna) {
       return res.status(401).json({ error: 'Unauthorized' });
-    }
+    } 
 
     try {
       const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
@@ -55,7 +55,6 @@ const googleCallbackHandler = (req, res, next) => {
       console.log(decodedToken);
 
       res.cookie('token', token, { httpOnly: true, secure: true });
-      res.status(200).send({ message: "Login berhasil", pengguna, token });
 
       res.redirect(`${process.env.CLIENT_URL}/dashboard`);
     } catch (error) {

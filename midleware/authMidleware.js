@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const authenticateToken = (req, res, next) => {
     let token = req.headers.authorization || req.cookies.token;
@@ -12,7 +13,7 @@ const authenticateToken = (req, res, next) => {
 
     console.log("Received Token:", token); 
 
-    jwt.verify(token, 'secret_key', (err, decoded) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
             console.log("Token Verification Error:", err.message); 
             return res.status(403).send({ message: "Forbidden: Invalid token" });
