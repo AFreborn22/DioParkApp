@@ -49,7 +49,7 @@ const googleCallbackHandler = (req, res, next) => {
     }
 
     try {
-      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, { expiresIn: '1h' });
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
