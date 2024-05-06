@@ -49,20 +49,11 @@ const googleCallbackHandler = (req, res, next) => {
     }
 
     // Buat token JWT
-    const token = jwt.sign(
-      { id_pengguna: pengguna.id_pengguna, email: pengguna.email },
-      process.env.SECRET_KEY,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) {
-          console.error('Error creating JWT:', err);
-          return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        res.cookie('token', token, { httpOnly: true, secure: true });
-        res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-      }
-    );
-    
+      const token = jwt.sign({ email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+      res.cookie('token', token, { httpOnly: true, secure: true });
+
+    // Redirect ke halaman dashboard
+    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   })(req, res, next);
 };
 
