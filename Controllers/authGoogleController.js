@@ -40,7 +40,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 const googleCallbackHandler = (req, res, next) => {
-  passport.authenticate('google', { failureRedirect: '/login', }, (err, pengguna) => {
+  passport.authenticate('google', { failureRedirect: '/login' }, async (err, pengguna) => {
     if (err) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -48,16 +48,16 @@ const googleCallbackHandler = (req, res, next) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Buat token JWT
-      const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    try {
+      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
-      
+
       res.cookie('token', token, { httpOnly: true, secure: true });
       res.status(200).send({ message: "Login berhasil", pengguna, token });
-
-    // Redirect ke halaman dashboard
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
   })(req, res, next);
 };
 
