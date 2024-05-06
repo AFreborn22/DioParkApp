@@ -77,11 +77,6 @@ exports.updateProfile = async (req, res) => {
     const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
     const userId = req.pengguna.id_pengguna;
 
-    let hashedPassword;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
-    }
-
     // Update informasi profil pengguna
     const updatedPengguna = await Pengguna.update(
       {
@@ -91,7 +86,6 @@ exports.updateProfile = async (req, res) => {
         detail_kendaraan,
         email,
         username,
-        ...(hashedPassword && { password: hashedPassword }), 
       },
       { where: { id_pengguna: userId } } 
     );
