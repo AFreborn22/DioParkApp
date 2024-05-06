@@ -12,12 +12,14 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
+    if (!req.user) {
+      return res.status(401).send('Unauthorized');
+    }
 
-    const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, 'secret_key', { expiresIn: '1h' }); 
+    const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
     res.redirect('/');
   }
 );
 
 module.exports = router;
-

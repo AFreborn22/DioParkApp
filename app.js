@@ -31,7 +31,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
-    secret: process.env.GOOGLE_CLIENT_SECRET,
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false
 }));
