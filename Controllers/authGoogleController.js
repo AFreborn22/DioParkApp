@@ -6,6 +6,7 @@ const Pengguna = require('../Models/pengguna');
 const jwt = require('jsonwebtoken');
 
 passport.use(new GoogleStrategy({
+    name: 'Diopark',
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
