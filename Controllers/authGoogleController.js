@@ -50,6 +50,9 @@ const googleCallbackHandler = (req, res, next) => {
 
     // Buat token JWT
       const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+      const decodedToken = jwt.decode(token);
+      console.log(decodedToken);
+      
       res.cookie('token', token, { httpOnly: true, secure: true });
 
     // Redirect ke halaman dashboard
