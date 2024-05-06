@@ -9,7 +9,7 @@ exports.getAvailableParkirMotor = async (req, res) => {
             }
         });
 
-        const countAvailableParkir = availableParkir.length; // Hitung jumlah parkir yang tersedia
+        const countAvailableParkir = availableParkir.length; 
 
         res.json({ availableParkir: availableParkir, jumlahParkirTersedia: countAvailableParkir });
     } catch (error) {
@@ -27,7 +27,7 @@ exports.getAvailableParkirMobil = async (req, res) => {
             }
         });
 
-        const countAvailableParkir = availableParkir.length; // Hitung jumlah parkir yang tersedia
+        const countAvailableParkir = availableParkir.length; 
 
         res.json({ availableParkir: availableParkir, jumlahParkirTersedia: countAvailableParkir });
     } catch (error) {

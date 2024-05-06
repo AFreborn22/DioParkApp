@@ -118,3 +118,10 @@ exports.getDataUser = async (req, res) => {
     res.status(500).json({ error: 'Terjadi kesalahan saat mengambil data pengguna.' });
   }
 };
+
+exports.logout = async (req, res) => {
+
+  res.clearCookie('token'); 
+  res.status(200).json({ message: 'Logout berhasil' });
+  
+};
