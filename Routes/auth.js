@@ -15,10 +15,9 @@ router.get('/google/callback',
     if (!req.user) {
       return res.status(401).send('Unauthorized');
     }
-
     const token = jwt.sign({ id_pengguna: req.user.id_pengguna, email: req.user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true });
-    res.redirect(`https://diopark.vercel.app//dashboard?token=${token}`);
+    res.cookie('token', token, { httpOnly: true, secure: true });
+    res.redirect(`https://diopark.vercel.app//dashboard`);
     
   }
 );
