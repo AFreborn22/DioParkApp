@@ -44,11 +44,11 @@ app.use(passport.session());
 // Database Connection
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    username: process.env.DB_USERNAME_PRO ,
-    password: process.env.DB_PASSWORD_PRO ,
-    host: process.env.DB_HOST_PRO ,
-    port: process.env.DB_PORT_PRO ,
-    database: process.env.DB_NAME_PRO ,
+    username: process.env.DB_USERNAME_PRO || 'root',
+    password: process.env.DB_PASSWORD_PRO || '',
+    host: process.env.DB_HOST_PRO || 'localhost',
+    port: process.env.DB_PORT_PRO || '3306',
+    database: process.env.DB_NAME_PRO || 'parkingmonitoring',
 });
 sequelize
     .authenticate()
