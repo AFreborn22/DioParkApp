@@ -57,7 +57,7 @@ const googleCallbackHandler = (req, res, next) => {
 
       res.cookie('token', token, { httpOnly: true, secure: true });
       
-      res.redirect(`${$CLIENT_URL}/dashboard`); 
+      res.redirect(`${$process.env.CLIENT_URL}/dashboard`); 
     } catch (error) {
       console.error('apa eror nya? :', error);
       return res.status(500).json({ error, error: 'Internal Server Error' });
