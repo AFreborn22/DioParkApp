@@ -28,7 +28,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://diopark.vercel.app',
+    origin: '*',
     credentials: true 
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
