@@ -36,7 +36,8 @@ app.use(bodyParser.json());
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie : { secure : true }
 }));
 app.use(passport.initialize());
 app.use(passport.session());

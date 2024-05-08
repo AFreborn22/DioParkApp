@@ -55,13 +55,16 @@ const googleCallbackHandler = (req, res, next) => {
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
+      if (!token) {
+        throw new Error('Failed to generate JWT token');
+      }
+
       res.cookie('token', token, { httpOnly: true, secure: true });
       
-      // res.redirect('/')
       res.redirect(`${process.env.CLIENT_URL}/dashboard`); 
     } catch (error) {
-      console.error('apa eror nya? :', error);
-      return res.status(500).json({ error, error: 'Internal Server Error' });
+      console.error('Error generating JWT token:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   })(req, res, next);
 };
