@@ -27,10 +27,14 @@ const cors = require('cors');
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: '*',
-    credentials: true 
-}));
+app.use(cors());
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://diopark.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
