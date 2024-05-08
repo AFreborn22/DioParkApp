@@ -55,8 +55,9 @@ const googleCallbackHandler = (req, res, next) => {
       console.log(decodedToken);
 
       res.cookie('token', token, { httpOnly: true, secure: true });
-
-      res.status(200).send({ message: "Login berhasil", pengguna, token });
+      
+      res.redirect(`${CLIENT_URL}/dashboard`)
+      // res.status(200).send({ message: "Login berhasil", pengguna, token });
     } catch (error) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
