@@ -56,8 +56,7 @@ const googleCallbackHandler = (req, res, next) => {
 
       res.cookie('token', token, { httpOnly: true, secure: true });
       
-      res.status(200).send({ message: "Login berhasil", pengguna, token });
-      res.redirect(`${CLIENT_URL}/dashboard`)
+      res.redirect(`${CLIENT_URL}/dashboard`); // Direct ke halaman frontend setelah berhasil login
     } catch (error) {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
