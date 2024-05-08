@@ -59,7 +59,8 @@ const googleCallbackHandler = (req, res, next) => {
       
       res.redirect(`${$CLIENT_URL}/dashboard`); 
     } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' });
+      console.error('apa eror nya? :', error);
+      return res.status(500).json({ error, error: 'Internal Server Error' });
     }
   })(req, res, next);
 };
