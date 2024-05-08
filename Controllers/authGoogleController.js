@@ -59,7 +59,7 @@ const googleCallbackHandler = (req, res, next) => {
         throw new Error('Failed to generate JWT token');
       }
 
-      res.cookie('token', token, { httpOnly: true, secure: true });
+      res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
       
       res.redirect(`${process.env.CLIENT_URL}/dashboard`); 
     } catch (error) {
