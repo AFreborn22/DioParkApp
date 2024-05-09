@@ -52,10 +52,8 @@ const googleCallbackHandler = (req, res, next) => {
 
     try {
       const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      
-      if (!token) {
-        throw new Error('Failed to generate JWT token');
-      }
+      const decodedToken = jwt.decode(token);
+      console.log(decodedToken);
 
       res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
       
