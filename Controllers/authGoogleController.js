@@ -61,7 +61,7 @@ const googleCallbackHandler = (req, res, next) => {
 
       res.header('Authorization', `Bearer ${token}`)
 
-      res.redirect(`${process.env.CALLBACK_URL}/dashboard`)
+      res.redirect(`${process.env.CLIENT_URL}/dashboard`)
     } catch (error) {
       console.error('Error generating JWT token:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
