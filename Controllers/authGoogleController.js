@@ -40,6 +40,35 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// const googleCallbackHandler = (req, res, next) => {
+//   passport.authenticate('google', { failureRedirect: '/login' }, async (err, pengguna) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//     if (!pengguna) {
+//       return res.status(401).json({ error: 'Unauthorized' });
+//     } 
+
+//     try {
+//       const token = jwt.sign({ id_pengguna: pengguna.id_pengguna, email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+//       const decodedToken = jwt.decode(token);
+//       console.log(decodedToken);
+
+//       if (!token) {
+//         throw new Error('Failed to generate JWT token');
+//       }
+
+//       res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
+      
+//       res.redirect(`${process.env.CLIENT_URL}/dashboard`); 
+//     } catch (error) {
+//       console.error('Error generating JWT token:', error);
+//       return res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   })(req, res, next);
+// };
+
 const googleCallbackHandler = (req, res, next) => {
   passport.authenticate('google', { failureRedirect: '/login' }, async (err, pengguna) => {
     if (err) {
@@ -59,8 +88,9 @@ const googleCallbackHandler = (req, res, next) => {
         throw new Error('Failed to generate JWT token');
       }
 
-      res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
-      
+      // Mengirim token melalui header
+      res.header('Authorization', `Bearer ${token}`);
+
       res.redirect(`${process.env.CLIENT_URL}/dashboard`); 
     } catch (error) {
       console.error('Error generating JWT token:', error);
