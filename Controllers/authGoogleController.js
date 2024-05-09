@@ -55,9 +55,13 @@ const googleCallbackHandler = (req, res, next) => {
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
-      res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
+      // res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
       
-      res.status(200).send({ message: "Login berhasil", pengguna, token });
+      // res.status(200).send({ message: "Login berhasil", pengguna, token });
+
+      res.header('Authorization', `Bearer ${token}`)
+
+      res.redirect(`${process.env.CALLBACK_URL}/dashboard`)
     } catch (error) {
       console.error('Error generating JWT token:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
