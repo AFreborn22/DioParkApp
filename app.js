@@ -27,7 +27,10 @@ const cors = require('cors');
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'https://diopark.vercel.app',
+    credentials: true
+}));
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://diopark.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
