@@ -1,5 +1,5 @@
-const Parkiran = require('../src/Models/parkiran');
-const Parkiranrealtime = require('../src/Models/parkiranrealtime');
+const Parkiran = require('..//Models/parkiran');
+const Parkiranrealtime = require('../Models/parkiranrealtime');
 
 async function getAllParkiranRealtime(req, res) {
     try {

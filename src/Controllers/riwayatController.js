@@ -1,5 +1,5 @@
-const Pengguna = require('../src/Models/pengguna');
-const Transaksi = require('../src/Models/transaksi');
+const Pengguna = require('../Models/pengguna');
+const Transaksi = require('../Models/transaksi');
 
 exports.getRiwayatTransaksi = async (req, res) => {
     try {

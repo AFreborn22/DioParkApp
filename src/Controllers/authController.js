@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const bcrypt = require('bcrypt');
-const Pengguna = require('../src/Models/pengguna');
+const Pengguna = require('../Models/pengguna');
 const Sequelize = require('sequelize');
 
 exports.register = async (req, res) => {

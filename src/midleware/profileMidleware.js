@@ -1,4 +1,4 @@
-const Pengguna = require('../src/Models/pengguna');
+const Pengguna = require('../Models/pengguna');
 
 async function checkProfileCompletion(req, res, next) {
   const  id_pengguna = req.pengguna.id_pengguna; // Ambil ID pengguna dari token JWT

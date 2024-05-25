@@ -1,8 +1,8 @@
-const Transaksi = require('../src/Models/transaksi');
-const Parkiran = require('../src/Models/parkiran');
-const Pengguna = require('../src/Models/pengguna');
-const Parkiranrealtime = require('../src/Models/parkiranrealtime');
-const { transporter } = require('../src/helpers/transporter');
+const Transaksi = require('../Models/transaksi');
+const Parkiran = require('../Models/parkiran');
+const Pengguna = require('../Models/pengguna');
+const Parkiranrealtime = require('../Models/parkiranrealtime');
+const { transporter } = require('../helpers/transporter');
 
 async function scanMasukQRCode(req, res) {
   const { id_pengguna, email } = req.pengguna; 
