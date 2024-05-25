@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const Pengguna = require('../Models/pengguna');
-const { transporter } = require('../helpers/transporter');
+const Pengguna = require('../src/Models/pengguna');
+const { transporter } = require('../src/helpers/transporter');
 
 exports.forgotPassword = async (req, res) => {
     try {

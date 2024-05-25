@@ -1,4 +1,4 @@
-const Parkiranrealtime = require('../Models/parkiranrealtime');
+const Parkiranrealtime = require('../src/Models/parkiranrealtime');
 
 // Endpoint untuk generate QR code keluar parkir
 async function generateQRCodeForExitParking(req, res) {

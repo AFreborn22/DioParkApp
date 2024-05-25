@@ -1,4 +1,4 @@
-const Parkiran = require('../Models/parkiran');
+const Parkiran = require('../src/Models/parkiran');
 
 async function generateQRCodeForAvailableParkingMotor(req, res) {
     try {

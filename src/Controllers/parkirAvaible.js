@@ -1,4 +1,4 @@
-const Parkiran = require('../Models/parkiran');
+const Parkiran = require('../src/Models/parkiran');
 
 exports.getAvailableParkirMotor = async (req, res) => {
     try {
