@@ -1,8 +1,8 @@
 {
   "name": "diopark",
   "version": "1.0.0",
-  "description": "parking monitoring superior",
-  "main": "index.js",
+  "description": "API parking monitoring superior",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
     "start": "node src/server.js",
@@ -10,7 +10,7 @@
   },
   "author": "Akmal Fauzan",
   "license": "ISC",
-  "dependencies": {
+  "dependencies": {   
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
