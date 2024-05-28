@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
+const config = require('../config/config');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 require('./Controllers/authGoogleController');   
@@ -49,13 +50,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Database Connection
+const env = process.env.NODE_ENV || 'development';
+const dbConfig = config[env];
+
+// Buat koneksi database menggunakan konfigurasi yang sesuai
 const sequelize = new Sequelize({
-    dialect: 'mysql',
-    username: process.env.DB_USERNAME ,
-    password: process.env.DB_PASSWORD ,
-    host: process.env.DB_HOST ,
-    port: process.env.DB_PORT ,
-    database: process.env.DB_NAME ,
+  dialect: dbConfig.dialect,
+  username: dbConfig.username,
+  password: dbConfig.password,
+  host: dbConfig.host,
+  port: dbConfig.port,
+  database: dbConfig.database,
 });
 sequelize
     .authenticate()
