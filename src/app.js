@@ -21,7 +21,6 @@ const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 
 const app = express();
-const port = process.env.PORT 
 const cors = require('cors');
 
 // Middleware
@@ -82,9 +81,5 @@ app.use('/api/main', authenticateToken, getParkir)
 app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
-
-// app.listen(port, () => {
-//     console.log(`Berjalan di port ${port}`);
-// });
 
 module.exports = app;
