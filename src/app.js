@@ -21,7 +21,7 @@ const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 
 const app = express();
-const port = process.env.PORT
+const port = process.env.PORT 
 const cors = require('cors');
 
 // Middleware
@@ -52,11 +52,11 @@ app.use(passport.session());
 // Database Connection
 const sequelize = new Sequelize({
     dialect: 'mysql',
-    username: process.env.DB_USERNAME_PRO ,
-    password: process.env.DB_PASSWORD_PRO ,
-    host: process.env.DB_HOST_PRO ,
-    port: process.env.DB_PORT_PRO ,
-    database: process.env.DB_NAME_PRO ,
+    username: process.env.DB_USERNAME ,
+    password: process.env.DB_PASSWORD ,
+    host: process.env.DB_HOST ,
+    port: process.env.DB_PORT ,
+    database: process.env.DB_NAME ,
 });
 sequelize
     .authenticate()
@@ -83,6 +83,8 @@ app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
 
-app.listen(port, () => {
-    console.log(`Berjalan di port ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Berjalan di port ${port}`);
+// });
+
+module.exports = app;

@@ -7,11 +7,17 @@ const Sequelize = require('sequelize');
 exports.register = async (req, res) => {
   try {
     const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
+
+    if (!nama || !nomor_telp || !nomor_polisi || !detail_kendaraan || !email || !username || !password) {
+      console.log('Field kosong ditemukan');
+      return res.status(400).send({ message: 'Semua field harus diisi.' });
+    }
     
     // Periksa apakah email sudah terdaftar
     const existingUser = await Pengguna.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).send({ message: "Email sudah terdaftar. Silakan gunakan email lain." });
+      console.log(`Email sudah terdaftar: ${email}`);
+      return res.status(400).send({ message: 'Email sudah terdaftar. Silakan gunakan email lain.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,10 +31,10 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).send({ message: "Pengguna berhasil terdaftar", pengguna });
+    res.status(201).send({ message: 'Pengguna berhasil terdaftar', pengguna });
   } catch (error) {
     res.status(500).send(error.message);
-  }   
+  }
 };
 
 exports.login = async (req, res) => {
