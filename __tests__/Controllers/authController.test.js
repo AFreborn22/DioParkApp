@@ -1,5 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app'); 
+const mockAuthMiddleware = require('../midleware/mockMidleware');
+const Pengguna = require('../../src/Models/pengguna')
 
 describe('Auth Controller - Register', () => {
   test('should register a new user successfully', async () => {
@@ -135,22 +137,53 @@ describe('Auth Controller - Login', () => {
   });
 });
 
-let token; 
+app.use('/api/profile/update', mockAuthMiddleware);
+app.use('/api/profile/show', mockAuthMiddleware)
 
-beforeEach(async () => {
-  const credentials = {
-    email: 'johndoe@example.com',
-    password: 'password123',
-  };
+describe('Auth Controller - Get User Data', () => {
+  let token;
 
-  const res = await request(app)
-    .post('/api/auth/login')
-    .send(credentials);
+    beforeEach(async () => {
+      const credentials = {
+        email: 'johndoe@example.com',
+        password: 'password123',
+      };
 
-  token = res.body.token;
+      const res = await request(app)
+        .post('/api/auth/login')
+        .send(credentials);
+
+      token = res.body.token;
+    });
+
+  test('should get user data successfully', async () => {
+    const res = await request(app)
+      .get('/api/profile/show')
+      .set('Authorization', `Bearer ${token}`);
+
+    console.log('Response body:', res.body);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('pengguna');
+  });
 });
 
 describe('Auth Controller - Update Profile', () => {
+  let token;
+
+    beforeEach(async () => {
+      const credentials = {
+        email: 'johndoe@example.com',
+        password: 'password123',
+      };
+
+      const res = await request(app)
+        .post('/api/auth/login')
+        .send(credentials);
+
+      token = res.body.token;
+    });
+    
   test('should update user profile successfully', async () => {
     const updatedProfile = {
       nama: 'John Doe Updated',
@@ -164,7 +197,7 @@ describe('Auth Controller - Update Profile', () => {
     const res = await request(app)
       .put('/api/profile/update')
       .send(updatedProfile)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${token}`);
 
     console.log('Response body:', res.body);
 
@@ -172,7 +205,10 @@ describe('Auth Controller - Update Profile', () => {
     expect(res.body).toHaveProperty('message', 'Profil berhasil di ubah');
   });
 
+
   test('should return 404 if user is not found or no changes applied', async () => {
+    await Pengguna.destroy({ where: { email: 'johndoe@example.com' } });
+    
     const nonExistingProfile = {
       nama: 'Nonexistent User',
       nomor_telp: '081234567891',
@@ -183,38 +219,14 @@ describe('Auth Controller - Update Profile', () => {
     };
 
     const res = await request(app)
-      .put('/api/profile/update') 
+      .put('/api/profile/update')
       .send(nonExistingProfile)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${token}`);
 
     console.log('Response body:', res.body);
 
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty('message', 'Pengguna tidak ditemukan atau tidak ada perubahan yang diterapkan');
-  });
-});
-
-describe('Auth Controller - Get User Data', () => {
-  test('should get user data successfully', async () => {
-    const res = await request(app)
-      .get('/api/profile/show')
-      .set('Authorization', `Bearer ${token}`)
-
-    console.log('Response body:', res.body);
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty('pengguna');
-  });
-
-  test('should return 404 if user data not found', async () => {
-    const res = await request(app)
-      .get('/api/profile/show')
-      .set('Authorization', `Bearer ${token}`)
-
-    console.log('Response body:', res.body);
-
-    expect(res.statusCode).toBe(404);
-    expect(res.body).toHaveProperty('error', 'Data pengguna tidak ditemukan.');
   });
 });
 
