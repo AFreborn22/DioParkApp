@@ -13,7 +13,7 @@ exports.checkAdminAuth = async (req, res, next) => {
       token = token.slice(7, token.length);
     }
 
-    const decoded = jwt.verify(token, 'secret_key');
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const admin = await Admin.findByPk(decoded.username);
 
     if (!admin) {

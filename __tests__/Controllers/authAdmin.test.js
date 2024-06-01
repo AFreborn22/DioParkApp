@@ -8,6 +8,8 @@ describe('Admin Login API', () => {
     const res = await request(app)
       .post('/api/auth/admin/login')
       .send({ username: 'admin1', password: 'jawir123' });
+    
+    console.log('Response body:', res.body);  
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('token');

@@ -16,7 +16,7 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-        model : 'pengguna',
+        model : Pengguna,
         key : 'id_pengguna',
       },
     },
@@ -24,7 +24,7 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
         type: DataTypes.STRING,
         allowNull: false,
         references: {
-        model : 'parkiran',
+        model : Parkiran,
         key : 'blok_parkir',
       },
     },
@@ -32,7 +32,7 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-        model : 'transaksi',
+        model : Transaksi,
         key : 'id_transaksi',
       },
     },

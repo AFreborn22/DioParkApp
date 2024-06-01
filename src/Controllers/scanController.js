@@ -9,7 +9,7 @@ async function scanMasukQRCode(req, res) {
   const { blok_parkir } = req.body; 
 
   try {
-    // Cari data parkiran sesuai dengan blok_parkir dari QR code
+
     const parkiran = await Parkiran.findOne({ where: { blok_parkir, status: 'available' } });
 
     if (!parkiran) {
@@ -59,7 +59,6 @@ async function scanKeluarQRCode(req, res) {
   const { blok_parkir } = req.body; 
 
   try {
-    // Cari data parkiran sesuai dengan blok_parkir dari QR code
     const parkiran = await Parkiran.findOne({ where: { blok_parkir, status: 'unavailable' } });
 
     if (!parkiran) {

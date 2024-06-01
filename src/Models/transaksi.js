@@ -1,22 +1,22 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(process.env.MYSQL_URL)
+const sequelize = new Sequelize(process.env.MYSQL_URL);
 
 const Pengguna = require('./pengguna');
 const Parkiran = require('./parkiran');
 
 const Transaksi = sequelize.define('transaksi_parkir', {
     id_transaksi: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
     id_pengguna: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-        model : 'Pengguna',
-        key : 'id_pengguna',
-      },
+            model: Pengguna,
+            key: 'id_pengguna',
+        },
     },
     waktu_parkir: {
         type: DataTypes.DATE,
@@ -28,22 +28,22 @@ const Transaksi = sequelize.define('transaksi_parkir', {
         allowNull: false,
     },
     blok_parkir: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
-        model : 'Parkiran',
-        key : 'blok_parkir',
-      },
+            model: Parkiran,
+            key: 'blok_parkir',
+        },
     },
-  }, {
+}, {
     freezeTableName: true,
     timestamps: false,
-  });
+});
 
-  Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
-  Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna' });
-  Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });
-  Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir' });
-  
+Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna' });
+Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
+
+Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir' });
+Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });
+
 module.exports = Transaksi;
-

@@ -138,7 +138,7 @@ describe('Auth Controller - Login', () => {
 });
 
 app.use('/api/profile/update', mockAuthMiddleware);
-app.use('/api/profile/show', mockAuthMiddleware)
+app.use('/api/profile/show', mockAuthMiddleware);
 
 describe('Auth Controller - Get User Data', () => {
   let token;
