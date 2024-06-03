@@ -55,7 +55,7 @@ const googleCallbackHandler = (req, res, next) => {
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
-      res.redirect(`${process.env.CLIENT_URL}/dashboard/token?=token=${token}`);
+      res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`);
 
     } catch (error) {
       console.error('Error generating JWT token:', error);
