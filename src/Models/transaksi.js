@@ -41,9 +41,9 @@ const Transaksi = sequelize.define('transaksi_parkir', {
 });
 
 Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
-Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
+Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
 
 Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
-Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
+Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });
 
 module.exports = Transaksi;

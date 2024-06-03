@@ -42,10 +42,12 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
   });
 
   Pakiranrealtime.belongsTo(Pengguna, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
-  Pengguna.hasMany(Pakiranrealtime, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
+  Pengguna.hasMany(Pakiranrealtime, { foreignKey: 'id_pengguna' });
+  
   Pakiranrealtime.belongsTo(Parkiran, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
-  Parkiran.hasMany(Pakiranrealtime, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
-  Pakiranrealtime.belongsTo(Transaksi, { foreignKey: 'id_transaksi', onDelete: 'CASCADE' }); 
-  Transaksi.hasMany(Pakiranrealtime, { foreignKey: 'id_transaksi', onDelete: 'CASCADE' });
+  Parkiran.hasMany(Pakiranrealtime, { foreignKey: 'blok_parkir' });
+  
+  Pakiranrealtime.belongsTo(Transaksi, { foreignKey: 'id_transaksi', onDelete: 'CASCADE' });
+  Transaksi.hasMany(Pakiranrealtime, { foreignKey: 'id_transaksi' });
   
 module.exports = Pakiranrealtime;

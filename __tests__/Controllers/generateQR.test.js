@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const Parkiran = require('../../src/Models/parkiran');
-const Parkiranrealtime = require('../../src/Models/parkiranrealtime');
 const mockAdminMidleware = require('../midleware/mockAdminMidleware');
 
 app.use('/api/parkiran/masuk/generate-qr/motor', mockAdminMidleware);
@@ -25,40 +24,32 @@ describe('generateQRCodeForAvailableParking', () => {
 
   describe('generateQRCodeForAvailableParkingMotor', () => {
     test('should return 404 if no available parking for motor', async () => {
-      try {
-        await Parkiran.destroy({ where: { blok_parkir: 'A1' } });
-      } catch (error) {
-        console.error('Error deleting parking:', error);
-      }
-  
-      const res = await request(app)
-        .get('/api/parkiran/masuk/generate-qr/motor')
-        .set('Authorization', `Bearer ${token}`);
-  
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toHaveProperty('message', 'Tidak ada tempat parkir yang tersedia');
-    });
-  
-    test('should return 200 with available parking block for motor', async () => {
-      try {
-        await Parkiran.create({ blok_parkir: 'A1', lantai: 1, kendaraan: 'motor', status: 'available' });
-      } catch (error) {
-        console.error('Error creating parking:', error);
-      }
+      await Parkiran.destroy({ where: { blok_parkir: 'A1' } });
 
       const res = await request(app)
         .get('/api/parkiran/masuk/generate-qr/motor')
         .set('Authorization', `Bearer ${token}`);
-  
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body).toHaveProperty('message', 'Tidak ada tempat parkir yang tersedia');
+    });
+
+    test('should return 200 with available parking block for motor', async () => {
+      await Parkiran.create({ blok_parkir: 'A1', lantai: 1, kendaraan: 'motor', status: 'available' });
+
+      const res = await request(app)
+        .get('/api/parkiran/masuk/generate-qr/motor')
+        .set('Authorization', `Bearer ${token}`);
+
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('message', 'Data tempat parkir berhasil ditemukan');
       expect(res.body).toHaveProperty('data', 'A1');
     });
-  });  
+  });
 
   describe('generateQRCodeForAvailableParkingMobil', () => {
     test('should return 404 if no available parking for mobil', async () => {
-    await Parkiran.destroy({ where: { blok_parkir: 'B1'}});
+      await Parkiran.destroy({ where: { blok_parkir: 'B1' } });
 
       const res = await request(app)
         .get('/api/parkiran/masuk/generate-qr/mobil')

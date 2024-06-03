@@ -5,40 +5,31 @@ const { Sequelize } = require('sequelize');
 const config = require('../config/config');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-require('./Controllers/authGoogleController');   
+require('./Controllers/authGoogleController');
 const passport = require('passport');
+const cors = require('cors');
+
+// Routes
 const authRoutes = require('./Routes/auth');
-const { authenticateToken } = require('./midleware/authMidleware');
-const checkProfileCompletion = require('./midleware/profileMidleware');
 const akunRoutes = require('./Routes/akun');
 const scanRoutes = require('./Routes/scan');
 const adminRoutes = require('./Routes/admin');
 const transaksiRoutes = require('./Routes/transaksi');
-const parkiranRoutes = require('./Routes/parkiran');  
-const getParkir = require('./Routes/getParkir')
-const { checkAdminAuth } = require('./midleware/authAdmin');
+const parkiranRoutes = require('./Routes/parkiran');
+const getParkir = require('./Routes/getParkir');
 const generateQRoutes = require('./Routes/generateQR');
-const generateQRkeluaRoutes = require('./Routes/generateQRkeluar'); 
+const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 
+// Middleware
+const { authenticateToken } = require('./midleware/authMidleware');
+const checkProfileCompletion = require('./midleware/profileMidleware');
+const { checkAdminAuth } = require('./midleware/authAdmin');
+
 const app = express();
-const cors = require('cors');
 const allowedOrigins = ['https://diopark.vercel.app', 'http://admindiopark.vercel.app'];
 
-// Midleware
-app.use(express.json());
-app.use(cookieParser());
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
-
+// CORS Configuration
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -50,27 +41,43 @@ app.use(cors({
     credentials: true
 }));
 
+// Handle preflight requests
+app.options('*', (req, res) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.sendStatus(204);
+});
+
+// Other Middlewares
+app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie : { secure : true }
+    cookie: { secure : true }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Sequelize Initialization
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
 const sequelize = new Sequelize({
-  dialect: dbConfig.dialect,
-  username: dbConfig.username,
-  password: dbConfig.password,
-  host: dbConfig.host,
-  port: dbConfig.port,
-  database: dbConfig.database,
+    dialect: dbConfig.dialect,
+    username: dbConfig.username,
+    password: dbConfig.password,
+    host: dbConfig.host,
+    port: dbConfig.port,
+    database: dbConfig.database,
 });
 
 sequelize
@@ -82,19 +89,23 @@ sequelize
         console.error('Unable to connect to the database:', err);
     });
 
-app.get('/', (req, res) => (
-    res.send("Faishal Balikan? eh serius ? ga bercanda kan?")
-));
-
+// Routes
+app.get('/', (req, res) => res.send("Faishal Balikan? eh serius ? ga bercanda kan?"));
 app.use('/api/auth/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/password', forgotPassword);
 app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
-app.use('/api/main', authenticateToken, getParkir)
+app.use('/api/main', authenticateToken, getParkir);
 app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
+
+// Global Error Handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 module.exports = app;
