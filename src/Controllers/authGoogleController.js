@@ -55,10 +55,8 @@ const googleCallbackHandler = (req, res, next) => {
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
-      
-      res.status(200).send({ message: "Login berhasil", pengguna, token });
+      res.redirect(`${process.env.CLIENT_URL}/dashboard/token?=token=${token}`);
 
-      res.redirect(`${process.env.CLIENT_URL}/dashboard`)
     } catch (error) {
       console.error('Error generating JWT token:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
