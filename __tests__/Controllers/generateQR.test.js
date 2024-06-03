@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../../src/app');
+const { sequelize } = require('../../src/Models');
 const Parkiran = require('../../src/Models/parkiran');
 const mockAdminMidleware = require('../midleware/mockAdminMidleware');
 
@@ -10,6 +11,15 @@ describe('generateQRCodeForAvailableParking', () => {
   let token;
 
   beforeAll(async () => {
+    // Atur koneksi ke database
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+
+    // // Kosongkan tabel parkiran sebelum menjalankan tes
+    // await Parkiran.destroy({ where: {} });
+    // console.log('Parkiran table has been cleared.');
+
+    // Login sebagai admin untuk mendapatkan token
     const credentials = {
       username: 'admin1',
       password: 'jawir123',

@@ -27,7 +27,7 @@ const checkProfileCompletion = require('./midleware/profileMidleware');
 const { checkAdminAuth } = require('./midleware/authAdmin');
 
 const app = express();
-const allowedOrigins = ['https://diopark.vercel.app', 'http://admindiopark.vercel.app'];
+const allowedOrigins = ['https://diopark.vercel.app', 'https://admindiopark.vercel.app'];
 
 // CORS Configuration
 app.use(cors({
