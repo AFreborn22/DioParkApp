@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(process.env.MYSQL_URL)
 const Pengguna = require('./pengguna');
 const Parkiran = require('./parkiran');
 const Transaksi = require('./transaksi');
@@ -19,6 +21,7 @@ Parkiranrealtime.belongsTo(Transaksi, { foreignKey: 'id_transaksi' });
 Transaksi.hasMany(Parkiranrealtime, { foreignKey: 'id_transaksi' });
 
 module.exports = {
+  sequelize,
   Pengguna,
   Parkiran,
   Transaksi,

@@ -49,11 +49,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Database Connection
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-// Buat koneksi database menggunakan konfigurasi yang sesuai
 const sequelize = new Sequelize({
   dialect: dbConfig.dialect,
   username: dbConfig.username,
@@ -62,6 +60,7 @@ const sequelize = new Sequelize({
   port: dbConfig.port,
   database: dbConfig.database,
 });
+
 sequelize
     .authenticate()
     .then(() => {
@@ -71,7 +70,6 @@ sequelize
         console.error('Unable to connect to the database:', err);
     });
 
-// Routes
 app.get('/', (req, res) => (
     res.send("Faishal Balikan? eh serius ? ga bercanda kan?")
 ));

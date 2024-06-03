@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node src/server.js",
-    "dev": "nodemon --exec npm start"
+    "dev": "nodemon src/server.js"
   },
   "author": "Akmal Fauzan",
   "license": "ISC",

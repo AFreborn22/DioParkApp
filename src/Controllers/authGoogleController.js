@@ -55,11 +55,8 @@ const googleCallbackHandler = (req, res, next) => {
       const decodedToken = jwt.decode(token);
       console.log(decodedToken);
 
-      res.cookie('token', token, { maxAge: 3600000, httpOnly: true, secure: true });
       
-      // res.status(200).send({ message: "Login berhasil", pengguna, token });
-
-      // res.header('Authorization', `Bearer ${token}`)
+      res.status(200).send({ message: "Login berhasil", pengguna, token });
 
       res.redirect(`${process.env.CLIENT_URL}/dashboard`)
     } catch (error) {

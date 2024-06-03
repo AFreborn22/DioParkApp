@@ -1,11 +1,10 @@
 const Parkiranrealtime = require('../Models/parkiranrealtime');
 
-// Endpoint untuk generate QR code keluar parkir
 async function generateQRCodeForExitParking(req, res) {
-    const { blok_parkir } = req.body; // Ambil blok_parkir dari body request
+    const { blok_parkir } = req.body; 
 
     try {
-        // Cari data parkiran yang sesuai dengan blok_parkir dari database
+    
         const exitParking = await Parkiranrealtime.findOne({ where: { blok_parkir } });
 
         if (!exitParking) {
