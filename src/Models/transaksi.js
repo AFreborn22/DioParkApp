@@ -40,10 +40,10 @@ const Transaksi = sequelize.define('transaksi_parkir', {
     timestamps: false,
 });
 
-Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna' });
-Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
+Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
+Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
 
-Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir' });
-Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });
+Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
+Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
 
 module.exports = Transaksi;

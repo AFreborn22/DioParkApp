@@ -23,21 +23,33 @@ const forgotPassword = require('./Routes/forgot');
 
 const app = express();
 const cors = require('cors');
+const allowedOrigins = ['https://diopark.vercel.app', 'http://admindiopark.vercel.app'];
 
-// Middleware
+// Midleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: 'https://diopark.vercel.app',
-    credentials: true
-}));
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://diopark.vercel.app');
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
