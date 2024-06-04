@@ -3,6 +3,8 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
 
+const path = require('path');
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -26,7 +28,7 @@ const options = {
       },
     },
   },
-  apis: ['./*.js'],
+  apis: [path.join(__dirname, './*.js')],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
