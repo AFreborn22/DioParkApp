@@ -1,9 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerDefinition = require('./docs/swaggerDef');
+const setupSwagger = require('./docs/swagger');
 const { Sequelize } = require('sequelize');
 const config = require('../config/config');
 const bodyParser = require('body-parser');
@@ -57,13 +55,7 @@ app.options('*', (req, res) => {
     res.sendStatus(204);
 });
 
-const options = {
-    swaggerDefinition,
-    apis: ['../src/docs/*.js'],
-  };
-
-const swaggerSpec = swaggerJsdoc(options);
-
+setupSwagger(app);
 // Other Middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -101,7 +93,6 @@ sequelize
     });
 
 // Routes
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', adminRoutes);
 app.use('/api', authRoutes);
 app.use('/api', forgotPassword);
