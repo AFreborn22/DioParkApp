@@ -9,7 +9,7 @@ exports.checkAdminAuth = async (req, res, next) => {
     }
 
     if (token.startsWith('Bearer ')) {
-      // Remove 'Bearer ' from token if present
+
       token = token.slice(7, token.length);
     }
 

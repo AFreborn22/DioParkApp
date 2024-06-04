@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const setupSwagger = require('./docs/swagger');
 const { Sequelize } = require('sequelize');
 const config = require('../config/config');
 const bodyParser = require('body-parser');
@@ -21,6 +22,7 @@ const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 
+
 // Middleware
 const { authenticateToken } = require('./midleware/authMidleware');
 const checkProfileCompletion = require('./midleware/profileMidleware');
@@ -29,6 +31,7 @@ const { checkAdminAuth } = require('./midleware/authAdmin');
 const app = express();
 const allowedOrigins = ['https://diopark.vercel.app', 'https://admindiopark.vercel.app'];
 
+setupSwagger(app);
 // CORS Configuration
 app.use(cors({
     origin: (origin, callback) => {

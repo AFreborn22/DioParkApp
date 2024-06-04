@@ -16,7 +16,7 @@ async function getAllParkiranRealtime(req, res) {
 }
 
 async function getPenggunaByBlokParkir(req, res) {
-    const { blok_parkir } = req.params; // Ambil blok parkir dari parameter URL
+    const { blok_parkir } = req.params; 
 
     try {
         const penggunaParkir = await Parkiranrealtime.findOne({ where: { blok_parkir } });
