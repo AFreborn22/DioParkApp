@@ -59,7 +59,7 @@ app.options('*', (req, res) => {
 
 const options = {
     setupSwagger,
-    apis: ['./src/docs/*.js'],
+    apis: ['../src/docs/*.js'],
   };
 
 const swaggerSpec = swaggerJsdoc(options);
