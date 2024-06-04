@@ -1,7 +1,7 @@
 // swaggerDocs.js
 require('dotenv').config();
 
-const setupSwagger = {
+const swaggerDefinition = {
   definition: {
     openapi: '3.0.0',
     info: {
@@ -26,4 +26,4 @@ const setupSwagger = {
   },
 };
 
-module.exports = setupSwagger;
+module.exports = swaggerDefinition;

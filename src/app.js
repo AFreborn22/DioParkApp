@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const setupSwagger = require('./docs/swagger');
+const swaggerDefinition = require('./docs/swaggerDef');
 const { Sequelize } = require('sequelize');
 const config = require('../config/config');
 const bodyParser = require('body-parser');
@@ -58,7 +58,7 @@ app.options('*', (req, res) => {
 });
 
 const options = {
-    setupSwagger,
+    swaggerDefinition,
     apis: ['../src/docs/*.js'],
   };
 
