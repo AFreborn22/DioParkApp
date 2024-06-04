@@ -33,7 +33,11 @@ async function getPenggunaByBlokParkir(req, res) {
 
 async function getAllParkiran(req, res) {
     try {
-        const parkiran = await Parkiran.findAll();
+        const parkiran = await Parkiran.findAll({
+            where: {
+                status: 'available'
+            }
+        });;
         res.json(parkiran);
     } catch (error) {
         res.status(500).json({ error: error.message });
