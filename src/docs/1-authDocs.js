@@ -9,7 +9,7 @@
 
 /**
  * @swagger
- * api/auth/register:
+ * /auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
@@ -60,7 +60,7 @@
 
 /**
  * @swagger
- * api/auth/login:
+ * /auth/login:
  *   post:
  *     summary: Login a user
  *     tags: [Auth]
@@ -96,7 +96,7 @@
 
 /**
  * @swagger
- * api/profile/update:
+ * /profile/update:
  *   put:
  *     summary: Update user profile
  *     tags: [Auth]
@@ -140,7 +140,7 @@
 
 /**
  * @swagger
- * api/profile/show:
+ * /profile/show:
  *   get:
  *     summary: Get user data
  *     tags: [Auth]
@@ -157,7 +157,7 @@
 
 /**
  * @swagger
- * api/auth/logout:
+ * /auth/logout:
  *   post:
  *     summary: Logout a user
  *     tags: [Auth]
