@@ -31,7 +31,6 @@ const { checkAdminAuth } = require('./midleware/authAdmin');
 const app = express();
 const allowedOrigins = ['https://diopark.vercel.app', 'https://admindiopark.vercel.app'];
 
-setupSwagger(app);
 // CORS Configuration
 app.use(cors({
     origin: (origin, callback) => {
@@ -56,6 +55,7 @@ app.options('*', (req, res) => {
     res.sendStatus(204);
 });
 
+setupSwagger(app);
 // Other Middlewares
 app.use(express.json());
 app.use(cookieParser());
