@@ -3,7 +3,7 @@ const router = express.Router();
 const { authenticateToken } = require('../midleware/authMidleware');
 const authController = require('../Controllers/authController'); 
 
-router.put('/update', authenticateToken, authController.updateProfile);
-router.get('/show', authenticateToken, authController.getDataUser);
+router.put('/profile/update', authenticateToken, authController.updateProfile);
+router.get('/profile/show', authenticateToken, authController.getDataUser);
 
 module.exports = router;

@@ -94,16 +94,16 @@ sequelize
 
 // Routes
 app.get('/', (req, res) => res.send("Faishal Balikan? eh serius ? ga bercanda kan?"));
-app.use('/api/auth/admin', adminRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/password', forgotPassword);
-app.use('/api/profile', authenticateToken, akunRoutes);
-app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
-app.use('/api/transaksi', authenticateToken, transaksiRoutes);
-app.use('/api/main', authenticateToken, getParkir);
-app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
-app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
-app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
+app.use('/api', adminRoutes);
+app.use('/api', authRoutes);
+app.use('/api', forgotPassword);
+app.use('/api', authenticateToken, akunRoutes);
+app.use('/api', authenticateToken, checkProfileCompletion, scanRoutes);
+app.use('/api', authenticateToken, transaksiRoutes);
+app.use('/api', authenticateToken, getParkir);
+app.use('/api', checkAdminAuth, parkiranRoutes);
+app.use('/api', checkAdminAuth, generateQRoutes);
+app.use('/api', checkAdminAuth, generateQRkeluaRoutes);
 
 // Global Error Handling
 app.use((err, req, res, next) => {

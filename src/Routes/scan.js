@@ -5,12 +5,12 @@ const { authenticateToken } = require('../midleware/authMidleware');
 const checkProfileCompletion = require('../midleware/profileMidleware');
 
 // Rute untuk scan QR code masuk
-router.post('/scan-masuk', authenticateToken, checkProfileCompletion, (req, res) => {
+router.post('/diopark/scan-masuk', authenticateToken, checkProfileCompletion, (req, res) => {
     scanController.scanMasukQRCode(req, res);
   });
 
 // Rute untuk scan QR code keluar
-router.post('/scan-keluar', authenticateToken, checkProfileCompletion, (req, res) => {
+router.post('/diopark/scan-keluar', authenticateToken, checkProfileCompletion, (req, res) => {
     scanController.scanKeluarQRCode(req, res);
   });
 
