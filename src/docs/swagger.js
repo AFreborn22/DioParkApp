@@ -1,6 +1,4 @@
 // swaggerDocs.js
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
 
 const options = {
@@ -26,13 +24,6 @@ const options = {
       },
     },
   },
-  apis: ['./*.js'],
-};
-
-const swaggerSpec = swaggerJSDoc(options);
-
-const setupSwagger = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
 
 module.exports = setupSwagger;
