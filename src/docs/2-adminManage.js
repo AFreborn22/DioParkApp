@@ -12,7 +12,7 @@
  * /admin/parkiran/realtime:
  *   get:
  *     summary: Mendapatkan semua data parkiran real-time
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     responses:
  *       200:
  *         description: Berhasil mengambil data parkiran real-time
