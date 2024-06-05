@@ -44,7 +44,6 @@
  *                     username:
  *                       type: string
  *                       example: "admin123"
- *                     // Tambahkan properti lain dari objek admin jika diperlukan
  *                 token:
  *                   type: string
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
