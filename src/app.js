@@ -1,14 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const setupSwagger = require('./docs/swagger');
 const { Sequelize } = require('sequelize');
-const config = require('../config/config');
 const bodyParser = require('body-parser');
+const config = require('../config/config');
 const cookieParser = require('cookie-parser');
 require('./Controllers/authGoogleController');
 const passport = require('passport');
 const cors = require('cors');
+const setupSwagger = require('./docs/swagger');
 
 // Routes
 const authRoutes = require('./Routes/auth');
@@ -25,7 +25,7 @@ const forgotPassword = require('./Routes/forgot');
 
 // Middleware
 const { authenticateToken } = require('./midleware/authMidleware');
-const checkProfileCompletion = require('./midleware/profileMidleware');
+// const checkProfileCompletion = require('./midleware/profileMidleware');
 const { checkAdminAuth } = require('./midleware/authAdmin');
 
 const app = express();
@@ -97,7 +97,7 @@ app.use('/api', adminRoutes);
 app.use('/api', authRoutes);
 app.use('/api', forgotPassword);
 app.use('/api', authenticateToken, akunRoutes);
-app.use('/api', authenticateToken, checkProfileCompletion, scanRoutes);
+app.use('/api', authenticateToken, scanRoutes);
 app.use('/api', authenticateToken, transaksiRoutes);
 app.use('/api', authenticateToken, getParkir);
 app.use('/api', checkAdminAuth, parkiranRoutes);
