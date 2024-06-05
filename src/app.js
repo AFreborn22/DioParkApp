@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const { Sequelize } = require('sequelize');
-const bodyParser = require('body-parser');
 const config = require('../config/config');
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 require('./Controllers/authGoogleController');
 const passport = require('passport');
@@ -25,7 +25,7 @@ const forgotPassword = require('./Routes/forgot');
 
 // Middleware
 const { authenticateToken } = require('./midleware/authMidleware');
-// const checkProfileCompletion = require('./midleware/profileMidleware');
+const checkProfileCompletion = require('./midleware/profileMidleware');
 const { checkAdminAuth } = require('./midleware/authAdmin');
 
 const app = express();
@@ -56,6 +56,7 @@ app.options('*', (req, res) => {
 });
 
 setupSwagger(app);
+
 // Other Middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -93,16 +94,16 @@ sequelize
     });
 
 // Routes
-app.use('/api', adminRoutes);
-app.use('/api', authRoutes);
-app.use('/api', forgotPassword);
-app.use('/api', authenticateToken, akunRoutes);
-app.use('/api', authenticateToken, scanRoutes);
-app.use('/api', authenticateToken, transaksiRoutes);
-app.use('/api', authenticateToken, getParkir);
-app.use('/api', checkAdminAuth, parkiranRoutes);
-app.use('/api', checkAdminAuth, generateQRoutes);
-app.use('/api', checkAdminAuth, generateQRkeluaRoutes);
+app.use('/api/auth/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/password', forgotPassword);
+app.use('/api/profile', authenticateToken, akunRoutes);
+app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
+app.use('/api/transaksi', authenticateToken, transaksiRoutes);
+app.use('/api/main', authenticateToken, getParkir)
+app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
+app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
+app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
 
 // Global Error Handling
 app.use((err, req, res, next) => {
