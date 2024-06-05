@@ -1,5 +1,3 @@
-// swagger/parkiranDocs.js
-
 /**
  * @swagger
  * tags:
@@ -27,7 +25,7 @@
  * /admin/parkiran/search/{blok_parkir}:
  *   get:
  *     summary: Mendapatkan pengguna berdasarkan blok parkir
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     parameters:
  *       - in: path
  *         name: blok_parkir
@@ -49,7 +47,7 @@
  * /admin/parkiran:
  *   get:
  *     summary: Mendapatkan semua data parkiran
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     responses:
  *       200:
  *         description: Berhasil mengambil data parkiran
@@ -62,7 +60,7 @@
  * /admin/parkiran/create:
  *   post:
  *     summary: Menambahkan data parkiran baru
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     requestBody:
  *       required: true
  *       content:
@@ -98,7 +96,7 @@
  * /admin/parkiran/{blok_parkir}:
  *   put:
  *     summary: Memperbarui data parkiran
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     parameters:
  *       - in: path
  *         name: blok_parkir
@@ -138,7 +136,7 @@
  * /admin/parkiran/{blok_parkir}:
  *   delete:
  *     summary: Menghapus data parkiran
- *     tags: [Parkiran]
+ *     tags: [Fungsionalitas Admin]
  *     parameters:
  *       - in: path
  *         name: blok_parkir

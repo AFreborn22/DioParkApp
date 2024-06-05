@@ -1,5 +1,3 @@
-// swagger/1-authDocs.js
-
 /**
  * @swagger
  * tags:
