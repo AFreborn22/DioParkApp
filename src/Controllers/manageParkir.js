@@ -1,9 +1,16 @@
 const Parkiran = require('..//Models/parkiran');
+const Pengguna = require('..//Models/pengguna');
 const Parkiranrealtime = require('../Models/parkiranrealtime');
 
 async function getAllParkiranRealtime(req, res) {
     try {
-        const parkiranRealtime = await Parkiranrealtime.findAll();
+        const parkiranRealtime = await Parkiranrealtime.findAll({
+            include: [{
+                model: Pengguna,
+                as: 'pengguna',
+                attributes: ['nama', 'username', 'email', 'nomor_polisi', 'detail_kendaraan']
+            }]
+        });
 
         if (parkiranRealtime.length === 0) {
             return res.status(404).json({ message: 'Tidak ada pengguna yang parkir' });

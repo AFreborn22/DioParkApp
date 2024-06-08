@@ -1,24 +1,30 @@
 const request = require('supertest');
 const app = require('../app'); // pastikan path ke file app.js atau server.js yang mendefinisikan Express app
-const { sequelize } = require('../src/Models');
+const { sequelize } = require('../../src/Models');
+const Pengguna = require('../../src/Models/pengguna');
 const createTestData = require('../config/createdummy');
-const Pengguna = require('../src/Models/pengguna');
-const bcrypt = require('bcrypt');
+const mockAuthMidleware = require('../midleware/mockAuthMidleware');
+
+app.use('/api/profile/update', mockAuthMidleware);
+app.use('/api/profile/show', mockAuthMidleware);
+app.use('/api/auth/logout', mockAuthMidleware);
 
 describe('User API', () => {
-  let token;
+    beforeAll(async () => {
+        const transaction = await sequelize.transaction();
+        try {
+          await Pengguna.destroy({ where: {} }, { transaction });
+      
+          // Commit transaksi
+          await transaction.commit();
 
-  beforeAll(async () => {
-    await sequelize.sync({ force: true }); // Menghapus dan membuat ulang tabel
-    const { pengguna } = await createTestData();
-    token = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: pengguna.email,
-        password: 'password123',
-      })
-      .then(res => res.body.token);
-  });
+        } catch (error) {
+          // Rollback transaksi jika terjadi kesalahan
+          await transaction.rollback();
+          console.error('Error during cleanup:', error);
+          throw error;
+        }
+      });
 
   afterAll(async () => {
     await sequelize.close();
@@ -29,13 +35,13 @@ describe('User API', () => {
       const res = await request(app)
         .post('/api/auth/register')
         .send({
-          nama: 'Jane Doe',
-          nomor_telp: '081234567891',
-          nomor_polisi: 'AB123DE',
-          detail_kendaraan: 'Mobil',
-          email: 'janedoe@example.com',
-          username: 'janedoe',
-          password: 'password123',
+          nama: 'John Doe',
+          nomor_telp: '081234567890',
+          nomor_polisi: 'AB123CD',
+          detail_kendaraan: 'Motor',
+          email: 'johndoe@example.com',
+          username: 'johndoe',
+          password: 'password123'
         });
 
       expect(res.statusCode).toBe(201);
@@ -46,7 +52,7 @@ describe('User API', () => {
       const res = await request(app)
         .post('/api/auth/register')
         .send({
-          nama: 'John Doe',
+          nama: 'Jane Doe',
           nomor_telp: '081234567890',
           nomor_polisi: 'AB123CD',
           detail_kendaraan: 'Motor',
@@ -128,10 +134,22 @@ describe('User API', () => {
   });
 
   describe('Update Profile API', () => {
+    beforeEach(async () => {
+
+        const credentials = {
+          email: 'johndoe@example.com',
+          password: 'password123',
+        };
+        const loginRes = await request(app)
+          .post('/api/auth/login')
+          .send(credentials);
+        token = loginRes.body.token;
+      });
+
     it('should update user profile successfully', async () => {
+
       const res = await request(app)
-        .put('/api/auth/profile')
-        .set('Authorization', `Bearer ${token}`)
+        .put('/api/profile/update')
         .send({
           nama: 'John Updated',
           nomor_telp: '081234567890',
@@ -139,17 +157,17 @@ describe('User API', () => {
           detail_kendaraan: 'Motor',
           email: 'johnupdated@example.com',
           username: 'johnupdated',
-        });
+        })
+        .set('Authorization', `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('message', 'Profil berhasil di ubah');
     });
 
     it('should return error if user is not found', async () => {
-      const invalidToken = jwt.sign({ id_pengguna: 99999 }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
       const res = await request(app)
-        .put('/api/auth/profile')
-        .set('Authorization', `Bearer ${invalidToken}`)
+        .put('/api/profile/update')
         .send({
           nama: 'John Updated',
           nomor_telp: '081234567890',
@@ -157,7 +175,8 @@ describe('User API', () => {
           detail_kendaraan: 'Motor',
           email: 'johnupdated@example.com',
           username: 'johnupdated',
-        });
+        })
+        .set('Authorization', `Bearer ${token}`);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty('message', 'Pengguna tidak ditemukan atau tidak ada perubahan yang diterapkan');
@@ -165,9 +184,22 @@ describe('User API', () => {
   });
 
   describe('Get User Data API', () => {
+    beforeEach(async () => {
+
+        const credentials = {
+          email: 'johndoe@example.com',
+          password: 'password123',
+        };
+        const loginRes = await request(app)
+          .post('/api/auth/login')
+          .send(credentials);
+        token = loginRes.body.token;
+      });
+      
     it('should get user data successfully', async () => {
+
       const res = await request(app)
-        .get('/api/auth/profile')
+        .get('/api/profile/show')
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.statusCode).toBe(200);
@@ -175,9 +207,10 @@ describe('User API', () => {
     });
 
     it('should return error if user is not found', async () => {
+
       const res = await request(app)
-        .get('/api/auth/profile')
-        .set('Authorization', `Bearer ${invalidToken}`);
+        .get('/api/profile/show')
+        .set('Authorization', `Bearer ${token}`);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toHaveProperty('error', 'Data pengguna tidak ditemukan.');
@@ -186,6 +219,7 @@ describe('User API', () => {
 
   describe('Logout API', () => {
     it('should logout successfully', async () => {
+
       const res = await request(app)
         .post('/api/auth/logout')
         .set('Authorization', `Bearer ${token}`);
