@@ -1,26 +1,45 @@
 const request = require('supertest');
 const app = require('../../src/app');
+const { sequelize } = require('../../src/Models');
+const Parkiranrealtime = require('../../src/Models/parkiranrealtime');
+const Transaksi = require('../../src/Models/transaksi');
+const Pengguna = require('../../src/Models/pengguna');
 const Parkiran = require('../../src/Models/parkiran');
 const mockAdminMidleware = require('../midleware/mockAdminMidleware');
 
+// Pindahkan middleware mockAdminMidleware ke sini
 app.use('/api/parkiran/masuk/generate-qr/motor', mockAdminMidleware);
 app.use('/api/parkiran/masuk/generate-qr/mobil', mockAdminMidleware);
 
-let token; // Token untuk autentikasi
+let token;
 
 beforeAll(async () => {
-  // Bersihkan tabel Parkiran sebelum menjalankan test
-  await Parkiran.destroy({ where: {} });
+  const transaction = await sequelize.transaction();
+  try {
+    // Bersihkan tabel-tabel sebelum menjalankan tes
+    await Parkiranrealtime.destroy({ where: {} }, { transaction });
+    await Transaksi.destroy({ where: {} }, { transaction });
+    await Parkiran.destroy({ where: {} }, { transaction });
+    await Pengguna.destroy({ where: {} }, { transaction });
 
-  // Autentikasi sebagai admin dan dapatkan token
-  const credentials = {
-    username: 'admin1',
-    password: 'jawir123',
-  };
-  const res = await request(app)
-    .post('/api/auth/admin/login')
-    .send(credentials);
-  token = res.body.token;
+    // Commit transaksi
+    await transaction.commit();
+
+    // Autentikasi sebagai admin dan dapatkan token
+    const credentials = {
+      username: 'admin1',
+      password: 'jawir123',
+    };
+    const res = await request(app)
+      .post('/api/auth/admin/login')
+      .send(credentials);
+    token = res.body.token;
+  } catch (error) {
+    // Rollback transaksi jika terjadi kesalahan
+    await transaction.rollback();
+    console.error('Error during cleanup:', error);
+    throw error;
+  }
 });
 
 describe('generateQRCodeForAvailableParking', () => {
@@ -35,7 +54,6 @@ describe('generateQRCodeForAvailableParking', () => {
     });
 
     test('should return 200 with available parking block for motor', async () => {
-      // Tambahkan data tempat parkir yang tersedia untuk motor
       await Parkiran.create({ blok_parkir: 'A1', lantai: 1, kendaraan: 'motor', status: 'available' });
 
       const res = await request(app)
