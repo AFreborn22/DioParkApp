@@ -3,10 +3,10 @@ const Transaksi = require('../Models/transaksi');
 
 exports.getRiwayatTransaksi = async (req, res) => {
     try {
-        const penggunaId = req.pengguna.id_pengguna; 
+        const emailPengguna = req.pengguna.email; 
 
         const riwayatTransaksi = await Transaksi.findAll({
-            where: { id_pengguna: penggunaId },
+            where: { email: emailPengguna },
             include: [{
                 model: Pengguna, 
                 as: 'pengguna',

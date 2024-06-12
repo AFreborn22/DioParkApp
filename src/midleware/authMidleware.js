@@ -1,27 +1,30 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const Pengguna = require('../Models/pengguna');
 
-const authenticateToken = (req, res, next) => {
-    let token = req.headers.authorization || req.cookies.token;
-    if (!token || !token.startsWith('Bearer ')) {
-        return res.status(401).send({ message: "Unauthorized: No token provided" });
-    }
+exports.authenticateToken = async (req, res, next) => {
+    try {
+        let token = req.headers.authorization || req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ message: "Unauthorized: No token provided" });
+        }
 
-    if (token.startsWith('Bearer ')) {
-        token = token.slice(7, token.length);
-    }
+        if (token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
+        }
 
-    console.log("Received Token:", token); 
+        console.log("Received Token:", token); 
 
-    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-        if (err) {
-            console.log("Token Verification Error:", err.message); 
-            return res.status(403).send({ message: "Forbidden: Invalid token" });
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const pengguna = await Pengguna.findByPk(decoded.email);
+
+        if (!pengguna) {
+            return res.status(401).json({ message: 'Invalid token' });
         }
 
         req.pengguna = decoded;
         next();
-    });
+    } catch (error) {
+        console.error("Token Verification Error:", error.message); 
+        return res.status(403).json({ message: "Forbidden: Invalid token" });
+    }
 };
-
-module.exports = { authenticateToken };

@@ -12,12 +12,12 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
       autoIncrement: true,
       primaryKey: true,
     },
-    id_pengguna: {
-        type: DataTypes.INTEGER,
+    email: {
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
         model : Pengguna,
-        key : 'id_pengguna',
+        key : 'email',
       },
     },
     blok_parkir: {
@@ -41,8 +41,8 @@ const Pakiranrealtime = sequelize.define('parkiranrealtime', {
     timestamps: false,
   });
 
-  Pakiranrealtime.belongsTo(Pengguna, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
-  Pengguna.hasMany(Pakiranrealtime, { foreignKey: 'id_pengguna' });
+  Pakiranrealtime.belongsTo(Pengguna, { foreignKey: 'email', onDelete: 'CASCADE' });
+  Pengguna.hasMany(Pakiranrealtime, { foreignKey: 'email' });
   
   Pakiranrealtime.belongsTo(Parkiran, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
   Parkiran.hasMany(Pakiranrealtime, { foreignKey: 'blok_parkir' });

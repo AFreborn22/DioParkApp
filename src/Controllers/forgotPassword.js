@@ -6,14 +6,14 @@ const { transporter } = require('../helpers/transporter');
 exports.forgotPassword = async (req, res) => {
     try {
       const { email } = req.body;
-      const pengguna = await Pengguna.findOne({ where: { email } });
+      const pengguna = await Pengguna.findByPk(email);
   
       if (!pengguna) {
         return res.status(404).json({ error: 'Pengguna tidak ditemukan' });
       }
   
       // buatin token buat reset password
-      const token = jwt.sign({ id_pengguna: pengguna.id_pengguna }, 'your_secret_key', { expiresIn: '1h' });
+      const token = jwt.sign({ email: pengguna.email }, 'your_secret_key', { expiresIn: '1h' });
   
       //simpen token nya ke db
       pengguna.tokenResetPassword = token;
@@ -48,7 +48,7 @@ exports.resetPassword = async (req, res) => {
       
       const decodedToken = jwt.verify(token, 'secret_key');
   
-      const pengguna = await Pengguna.findByPk(decodedToken.id_pengguna);
+      const pengguna = await Pengguna.findByPk(decodedToken.email);
   
       if (!pengguna) {
         return res.status(404).json({ error: 'Pengguna tidak di temukan' });

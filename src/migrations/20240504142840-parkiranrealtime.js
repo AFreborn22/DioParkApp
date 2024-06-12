@@ -7,12 +7,12 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      id_pengguna: {
-        type: Sequelize.INTEGER,
+      email: {
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
           model: 'pengguna', 
-          key: 'id_pengguna',
+          key: 'email',
         },
       },
       blok_parkir: {

@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../../src/app'); 
-const { sequelize } = require('../../src/Models/admin');
 
 describe('Admin Login API', () => {
 
@@ -22,9 +21,5 @@ describe('Admin Login API', () => {
 
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty('message', 'username atau password salah');
-  });
-
-  afterAll(async () => {
-    await sequelize.close();
   });
 });

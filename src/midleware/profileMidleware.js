@@ -1,10 +1,10 @@
 const Pengguna = require('../Models/pengguna');
 
 async function checkProfileCompletion(req, res, next) {
-  const  id_pengguna = req.pengguna.id_pengguna; // Ambil ID pengguna dari token JWT
+  const  emailPengguna = req.pengguna.email; 
 
   try {
-    const pengguna = await Pengguna.findByPk(id_pengguna);
+    const pengguna = await Pengguna.findOne({ where: { email: emailPengguna } });
 
     if (!pengguna) {
       return res.status(404).json({ error: 'Profil pengguna tidak ditemukan' });

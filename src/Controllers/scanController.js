@@ -5,7 +5,7 @@ const Parkiranrealtime = require('../Models/parkiranrealtime');
 const { transporter } = require('../helpers/transporter');
 
 async function scanMasukQRCode(req, res) {
-  const { id_pengguna, email } = req.pengguna; 
+  const {  email } = req.pengguna; 
   const { blok_parkir } = req.body; 
 
   try {
@@ -17,7 +17,7 @@ async function scanMasukQRCode(req, res) {
     }
 
     await Parkiran.update({ status: 'unavailable' }, { where: { blok_parkir } });
-    const pengguna = await Pengguna.findByPk(id_pengguna);
+    const pengguna = await Pengguna.findByPk(email);
 
     if (!pengguna) {
       return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
@@ -26,8 +26,8 @@ async function scanMasukQRCode(req, res) {
     // Buat transaksi masuk
     const waktu_parkir = new Date().toLocaleString(); 
     const status = 'masuk';
-    const transaksi = await Transaksi.create({ id_pengguna, waktu_parkir, status, blok_parkir });
-    const parkiranrealtime = await Parkiranrealtime.create({ id_pengguna, blok_parkir, id_transaksi: transaksi.id_transaksi });
+    const transaksi = await Transaksi.create({ email, waktu_parkir, status, blok_parkir });
+    const parkiranrealtime = await Parkiranrealtime.create({ email, blok_parkir, id_transaksi: transaksi.id_transaksi });
 
     await transporter.sendMail({
       from: 'dioparkApp',
@@ -55,7 +55,7 @@ async function scanMasukQRCode(req, res) {
 }
 
 async function scanKeluarQRCode(req, res) {
-  const { id_pengguna, email } = req.pengguna; 
+  const { email } = req.pengguna; 
   const { blok_parkir } = req.body; 
 
   try {
@@ -66,7 +66,7 @@ async function scanKeluarQRCode(req, res) {
     }
 
     await Parkiran.update({ status: 'available' }, { where: { blok_parkir } });
-    const pengguna = await Pengguna.findByPk(id_pengguna);
+    const pengguna = await Pengguna.findByPk(email);
 
     if (!pengguna) {
       return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
@@ -75,8 +75,8 @@ async function scanKeluarQRCode(req, res) {
     // Buat transaksi masuk
     const waktu_parkir = new Date().toLocaleString(); 
     const status = 'keluar';
-    const transaksi = await Transaksi.create({ id_pengguna, waktu_parkir, status, blok_parkir });
-    await Parkiranrealtime.destroy({ where: { id_pengguna, blok_parkir } });
+    const transaksi = await Transaksi.create({ email, waktu_parkir, status, blok_parkir });
+    await Parkiranrealtime.destroy({ where: { email, blok_parkir } });
 
     await transporter.sendMail({
       from: 'dioparkApp',

@@ -2,9 +2,9 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(process.env.MYSQL_URL)
 
 const Pengguna = sequelize.define('pengguna', {
-    id_pengguna: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
       primaryKey: true,
     },
     nama: {
@@ -12,10 +12,6 @@ const Pengguna = sequelize.define('pengguna', {
       allowNull: true,
     },
     username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },

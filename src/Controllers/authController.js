@@ -67,7 +67,7 @@ exports.login = async (req, res) => {
       return res.status(401).send({ message: "Kata sandi salah" });
     }
 
-    const token = jwt.sign({ id_pengguna: pengguna.id_pengguna ,email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
     const decodedToken = jwt.decode(token);
     console.log(decodedToken);
 
@@ -77,40 +77,11 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.updateProfile = async (req, res) => {
-  try {
-    const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username, password } = req.body;
-    const userId = req.pengguna.id_pengguna;
-
-    // Update informasi profil pengguna
-    const updatedPengguna = await Pengguna.update(
-      {
-        nama,
-        nomor_telp,
-        nomor_polisi,
-        detail_kendaraan,
-        email,
-        username,
-      },
-      { where: { id_pengguna: userId } } 
-    );
-
-    if (updatedPengguna[0] === 0) {
-      return res.status(404).send({ message: "Pengguna tidak ditemukan atau tidak ada perubahan yang diterapkan" });
-    }
-
-    res.status(200).send({ message: "Profil berhasil di ubah" });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-};
-
 exports.getDataUser = async (req, res) => {
-
-  const userId = req.pengguna.id_pengguna;
+  const emailPengguna = req.pengguna.email;
 
   try {
-    const pengguna = await Pengguna.findByPk(userId); 
+    const pengguna = await Pengguna.findByPk(emailPengguna);
 
     if (!pengguna) {
       return res.status(404).json({ error: 'Data pengguna tidak ditemukan.' });
@@ -120,6 +91,37 @@ exports.getDataUser = async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Terjadi kesalahan saat mengambil data pengguna.' });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { nama, nomor_telp, nomor_polisi, detail_kendaraan, email, username } = req.body;
+    const emailPengguna = req.pengguna.email;
+
+    // Objek untuk mengupdate data pengguna
+    const updatedData = {
+      nama,
+      nomor_telp,
+      nomor_polisi,
+      detail_kendaraan,
+      email,
+      username,
+    };
+
+    // Update informasi profil pengguna
+    const updatedPengguna = await Pengguna.update(
+      updatedData,
+      { where: { email: emailPengguna } } 
+    );
+
+    if (updatedPengguna[0] === 0) {
+      return res.status(404).send({ message: "Pengguna tidak ditemukan atau tidak ada perubahan yang diterapkan" });
+    }
+
+    res.status(200).send({ message: "Profil berhasil di ubah" });
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 };
 

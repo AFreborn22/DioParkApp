@@ -16,13 +16,10 @@ let token;
 beforeAll(async () => {
   const transaction = await sequelize.transaction();
   try {
-    // Bersihkan tabel-tabel sebelum menjalankan tes
     await Parkiranrealtime.destroy({ where: {} }, { transaction });
     await Transaksi.destroy({ where: {} }, { transaction });
     await Parkiran.destroy({ where: {} }, { transaction });
     await Pengguna.destroy({ where: {} }, { transaction });
-
-    // Commit transaksi
     await transaction.commit();
 
     // Autentikasi sebagai admin dan dapatkan token
@@ -35,11 +32,14 @@ beforeAll(async () => {
       .send(credentials);
     token = res.body.token;
   } catch (error) {
-    // Rollback transaksi jika terjadi kesalahan
     await transaction.rollback();
     console.error('Error during cleanup:', error);
     throw error;
   }
+});
+
+afterAll(async () => {
+  await sequelize.close(); 
 });
 
 describe('generateQRCodeForAvailableParking', () => {

@@ -10,12 +10,12 @@ const Transaksi = sequelize.define('transaksi_parkir', {
         autoIncrement: true,
         primaryKey: true,
     },
-    id_pengguna: {
-        type: DataTypes.INTEGER,
+    email: {
+        type: DataTypes.STRING,
         allowNull: false,
         references: {
             model: Pengguna,
-            key: 'id_pengguna',
+            key: 'email',
         },
     },
     waktu_parkir: {
@@ -40,8 +40,8 @@ const Transaksi = sequelize.define('transaksi_parkir', {
     timestamps: false,
 });
 
-Pengguna.hasMany(Transaksi, { foreignKey: 'id_pengguna', onDelete: 'CASCADE' });
-Transaksi.belongsTo(Pengguna, { foreignKey: 'id_pengguna' });
+Pengguna.hasMany(Transaksi, { foreignKey: 'email', onDelete: 'CASCADE' });
+Transaksi.belongsTo(Pengguna, { foreignKey: 'email' });
 
 Parkiran.hasMany(Transaksi, { foreignKey: 'blok_parkir', onDelete: 'CASCADE' });
 Transaksi.belongsTo(Parkiran, { foreignKey: 'blok_parkir' });

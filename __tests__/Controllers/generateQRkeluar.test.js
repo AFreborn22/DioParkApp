@@ -10,8 +10,12 @@ const mockAdminMidleware = require('../midleware/mockAdminMidleware');
 
 app.use('/api/parkiran/keluar/generate-qr/exit', mockAdminMidleware);
 
+afterAll(async () => {
+    await sequelize.close(); 
+  });
+
 describe('generateQRCodeForExitParking API', () => {
-    let token;
+    let token; k,lm 
 
     beforeAll(async () => {
         await sequelize.authenticate();
