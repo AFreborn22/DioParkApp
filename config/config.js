@@ -22,7 +22,7 @@ module.exports = {
     password: process.env.DB_PASSWORD_PRO,
     database: process.env.DB_NAME_PRO,
     host: process.env.DB_HOST_PRO,
-    port: 10257,
+    port: 25405,
     dialect: 'mysql'
   }
 };
