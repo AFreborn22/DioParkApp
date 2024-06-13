@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Pengguna = require('../Models/pengguna');
 const { transporter } = require('../helpers/transporter');
+require('dotenv').config();
 
 exports.forgotPassword = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ exports.forgotPassword = async (req, res) => {
       }
   
       // buatin token buat reset password
-      const token = jwt.sign({ email: pengguna.email }, 'your_secret_key', { expiresIn: '1h' });
+      const token = jwt.sign({ email: pengguna.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
   
       //simpen token nya ke db
       pengguna.tokenResetPassword = token;
@@ -46,7 +47,7 @@ exports.resetPassword = async (req, res) => {
       const { password } = req.body;
       const token = req.query.token;
       
-      const decodedToken = jwt.verify(token, 'secret_key');
+      const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
   
       const pengguna = await Pengguna.findByPk(decodedToken.email);
   
