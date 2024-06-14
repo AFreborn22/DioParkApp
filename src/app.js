@@ -21,6 +21,7 @@ const getParkir = require('./Routes/getParkir');
 const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
+const ticketRoutes = require('./Routes/ticket')
 
 
 // Middleware
@@ -99,6 +100,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/password', forgotPassword);
 app.use('/api/profile', authenticateToken, akunRoutes);
 app.use('/api/diopark', authenticateToken, checkProfileCompletion, scanRoutes);
+app.use('/api/show', authenticateToken, ticketRoutes);
 app.use('/api/transaksi', authenticateToken, transaksiRoutes);
 app.use('/api/main', authenticateToken, getParkir)
 app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
