@@ -9,8 +9,8 @@ async function scanMasukQRCode(req, res) {
   const { blok_parkir } = req.body; 
 
   try {
+    const parkiran = await Parkiran.findOne({ where: { blok_parkir, status: 'available' } });
 
- 
     if (!parkiran) {
       return res.status(404).json({ error: 'Parkiran tidak tersedia atau QR code tidak valid' });
     }
@@ -51,7 +51,6 @@ async function scanMasukQRCode(req, res) {
     console.error('Error saat memproses pemindaian QR code masuk:', error);
     res.status(500).json({ error: 'Gagal memproses pemindaian QR code masuk' });
   }
-  
 }
 
 async function scanKeluarQRCode(req, res) {

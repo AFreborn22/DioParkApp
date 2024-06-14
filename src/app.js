@@ -22,6 +22,7 @@ const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 const ticketRoutes = require('./Routes/ticket')
+const statisticRoutes = require('./Routes/statistic')
 
 
 // Middleware
@@ -106,6 +107,7 @@ app.use('/api/main', authenticateToken, getParkir)
 app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
+app.use('/api/statistic', checkAdminAuth, statisticRoutes);
 
 // Global Error Handling
 app.use((err, req, res, next) => {
