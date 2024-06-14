@@ -2,7 +2,7 @@ const Transaksi = require('../Models/transaksi');
 
 exports.getStatTransaksi = async (req, res) => {
   try {
-    // Ambil semua transaksi
+
     const transaksi = await Transaksi.findAll();
     
     // Objek untuk menyimpan transaksi per email
@@ -11,7 +11,6 @@ exports.getStatTransaksi = async (req, res) => {
     transaksi.forEach(trx => {
       const email = trx.email;
 
-      // Inisialisasi struktur penyimpanan jika belum ada
       if (!transaksiPerEmail[email]) {
         transaksiPerEmail[email] = { masuk: 0, keluar: 0 };
       }

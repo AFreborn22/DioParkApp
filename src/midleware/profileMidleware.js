@@ -1,5 +1,5 @@
 const Pengguna = require('../Models/pengguna');
-require('dotenv')
+require('dotenv').config();
 
 async function checkProfileCompletion(req, res, next) {
   const  emailPengguna = req.pengguna.email; 
