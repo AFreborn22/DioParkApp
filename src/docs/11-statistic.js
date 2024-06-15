@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /stat/transaksi:
+ * /statistic/transaksi:
  *   get:
  *     summary: Mengambil statistik transaksi parkir
  *     tags: [Statistic]
