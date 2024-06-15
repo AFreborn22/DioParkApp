@@ -22,7 +22,8 @@ const generateQRoutes = require('./Routes/generateQR');
 const generateQRkeluaRoutes = require('./Routes/generateQRkeluar');
 const forgotPassword = require('./Routes/forgot');
 const ticketRoutes = require('./Routes/ticket')
-const statisticRoutes = require('./Routes/statistic')
+const statisticRoutes = require('./Routes/statistic');
+const manageUserRoutes = require('./Routes/managePengguna');
 
 
 // Middleware
@@ -108,6 +109,7 @@ app.use('/api/admin/parkiran', checkAdminAuth, parkiranRoutes);
 app.use('/api/parkiran/masuk', checkAdminAuth, generateQRoutes);
 app.use('/api/parkiran/keluar', checkAdminAuth, generateQRkeluaRoutes);
 app.use('/api/statistic', checkAdminAuth, statisticRoutes);
+app.use('/api/manage', checkAdminAuth, manageUserRoutes);
 
 // Global Error Handling
 app.use((err, req, res, next) => {
