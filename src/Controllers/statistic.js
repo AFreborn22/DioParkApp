@@ -1,9 +1,18 @@
 const Transaksi = require('../Models/transaksi');
+const Parkiran = require('../Models/parkiran')
 
 exports.getStatTransaksi = async (req, res) => {
   try {
 
-    const transaksi = await Transaksi.findAll();
+    const transaksi = await Transaksi.findAll({
+      include: [
+        {
+            model: Parkiran,
+            as: 'parkiran', 
+            attributes: ['kendaraan'] 
+        }
+    ]
+    });
     
     // Objek untuk menyimpan transaksi per email
     const transaksiPerEmail = {};
