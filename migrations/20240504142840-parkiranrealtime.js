@@ -14,6 +14,8 @@ module.exports = {
           model: 'pengguna', 
           key: 'email',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       blok_parkir: {
         type: Sequelize.STRING,
@@ -22,6 +24,8 @@ module.exports = {
           model: 'parkiran', 
           key: 'blok_parkir',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       id_transaksi: {
         type: Sequelize.INTEGER,
@@ -30,6 +34,8 @@ module.exports = {
           model: 'transaksi_parkir', 
           key: 'id_transaksi',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
     });
   },

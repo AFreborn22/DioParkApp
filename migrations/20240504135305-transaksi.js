@@ -14,6 +14,8 @@ module.exports = {
           model: 'pengguna', 
           key: 'email',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       waktu_parkir: {
         type: Sequelize.DATE,
@@ -31,6 +33,8 @@ module.exports = {
           model: 'parkiran',
           key: 'blok_parkir',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
     });
   },
