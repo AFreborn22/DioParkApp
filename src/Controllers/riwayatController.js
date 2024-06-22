@@ -21,6 +21,7 @@ exports.getRiwayatTransaksi = async (req, res) => {
         const transaksiSet = new Set();
 
         for (const transaksi of riwayatTransaksi) {
+            transaksi.waktu_parkir = moment(transaksi.waktu_parkir).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
             const key = `${transaksi.waktu_parkir}-${transaksi.status}`;
             if (!transaksiSet.has(key)) {
                 transaksiSet.add(key);
