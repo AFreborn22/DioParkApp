@@ -12,12 +12,27 @@ exports.getRiwayatTransaksi = async (req, res) => {
                 as: 'pengguna',
                 attributes: ['nama', 'username', 'email', 'nomor_polisi', 'detail_kendaraan']
             }],
-            attributes: ['waktu_parkir', 'status'], 
+            attributes: ['id_transaksi', 'waktu_parkir', 'status'], 
             order: [['waktu_parkir', 'DESC']] 
         });
 
-        if (riwayatTransaksi.length > 0) {
-            res.send({ success: true, data: riwayatTransaksi });
+        // Menghapus entri duplikat
+        const uniqueTransaksi = [];
+        const transaksiSet = new Set();
+
+        for (const transaksi of riwayatTransaksi) {
+            const key = `${transaksi.waktu_parkir}-${transaksi.status}`;
+            if (!transaksiSet.has(key)) {
+                transaksiSet.add(key);
+                uniqueTransaksi.push(transaksi);
+            } else {
+                // Hapus transaksi duplikat dari database
+                await Transaksi.destroy({ where: { id_transaksi: transaksi.id_transaksi } });
+            }
+        }
+
+        if (uniqueTransaksi.length > 0) {
+            res.send({ success: true, data: uniqueTransaksi });
         } else {
             res.send({ success: false, message: "Tidak ada riwayat transaksi." });
         }
