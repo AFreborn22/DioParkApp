@@ -12,7 +12,7 @@ async function checkProfileCompletion(req, res, next) {
     }
 
     // Cek apakah profil sudah lengkap
-    if (!pengguna.nama || !pengguna.username || !pengguna.email || !pengguna.password || !pengguna.nomor_telp || !pengguna.nomor_polisi || !pengguna.detail_kendaraan) {
+    if (!pengguna.nama || !pengguna.username || !pengguna.email || !pengguna.nomor_telp || !pengguna.nomor_polisi || !pengguna.detail_kendaraan) {
       // Redirect ke rute update profil jika profil belum lengkap
       return res.redirect(`${process.env.CLIENT_URL}/userprofile`);
     }
