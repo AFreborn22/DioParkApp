@@ -4,40 +4,41 @@ const moment = require('moment-timezone');
 
 exports.getRiwayatTransaksi = async (req, res) => {
     try {
-        const emailPengguna = req.pengguna.email; 
+        const emailPengguna = req.pengguna.email;
 
         const riwayatTransaksi = await Transaksi.findAll({
             where: { email: emailPengguna },
             include: [{
-                model: Pengguna, 
+                model: Pengguna,
                 as: 'pengguna',
                 attributes: ['nama', 'username', 'email', 'nomor_polisi', 'detail_kendaraan']
             }],
-            attributes: ['id_transaksi', 'waktu_parkir', 'status'], 
-            order: [['waktu_parkir', 'DESC']] 
+            attributes: ['id_transaksi', 'waktu_parkir', 'status'],
+            order: [['waktu_parkir', 'DESC']]
         });
 
         // Menghapus entri duplikat
         const uniqueTransaksi = [];
         const transaksiSet = new Set();
+        const duplicateIds = [];
 
         for (const transaksi of riwayatTransaksi) {
-            transaksi.waktu_parkir = moment(transaksi.waktu_parkir).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
-            const key = `${transaksi.waktu_parkir}-${transaksi.status}`;
+            const waktuParkirJakarta = moment(transaksi.waktu_parkir).tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
+            const key = `${waktuParkirJakarta}-${transaksi.status}`;
             if (!transaksiSet.has(key)) {
                 transaksiSet.add(key);
-                uniqueTransaksi.push(transaksi);
-            } 
+                uniqueTransaksi.push({
+                    ...transaksi.get({ plain: true }),
+                    waktu_parkir: waktuParkirJakarta
+                });
+            } else {
+                duplicateIds.push(transaksi.id_transaksi);
+            }
         }
 
         // Menghapus transaksi duplikat dari database
-        for (const transaksi of riwayatTransaksi) {
-            const key = `${transaksi.waktu_parkir}-${transaksi.status}`;
-            if (transaksiSet.has(key)) {
-                transaksiSet.delete(key);
-            } else {
-                await Transaksi.destroy({ where: { id_transaksi: transaksi.id_transaksi } });
-            }
+        if (duplicateIds.length > 0) {
+            await Transaksi.destroy({ where: { id_transaksi: duplicateIds } });
         }
 
         if (uniqueTransaksi.length > 0) {
