@@ -3,9 +3,10 @@ const Parkiran = require('../Models/parkiran');
 const Pengguna = require('../Models/pengguna');
 const Parkiranrealtime = require('../Models/parkiranrealtime');
 const { transporter } = require('../helpers/transporter');
+const moment = require('moment-timezone');
 
 async function scanMasukQRCode(req, res) {
-  const {  email } = req.pengguna; 
+  const { email } = req.pengguna; 
   const { blok_parkir } = req.body; 
 
   try {
@@ -22,8 +23,8 @@ async function scanMasukQRCode(req, res) {
       return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
     }
 
-    // Buat transaksi masuk
-    const waktu_parkir = new Date().toLocaleString(); 
+    // Buat transaksi masuk dengan waktu di zona waktu Asia/Jakarta
+    const waktu_parkir = moment().tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
     const status = 'masuk';
     const transaksi = await Transaksi.create({ email, waktu_parkir, status, blok_parkir });
     const parkiranrealtime = await Parkiranrealtime.create({ email, blok_parkir, id_transaksi: transaksi.id_transaksi });
@@ -71,8 +72,8 @@ async function scanKeluarQRCode(req, res) {
       return res.status(404).json({ error: 'Informasi pengguna tidak ditemukan' });
     }
 
-    // Buat transaksi masuk
-    const waktu_parkir = new Date().toLocaleString(); 
+    // Buat transaksi keluar dengan waktu di zona waktu Asia/Jakarta
+    const waktu_parkir = moment().tz('Asia/Jakarta').format('YYYY-MM-DD HH:mm:ss');
     const status = 'keluar';
     const transaksi = await Transaksi.create({ email, waktu_parkir, status, blok_parkir });
     await Parkiranrealtime.destroy({ where: { email, blok_parkir } });
@@ -80,10 +81,10 @@ async function scanKeluarQRCode(req, res) {
     await transporter.sendMail({
       from: 'dioparkApp',
       to: email,
-      subject: 'Diopark App - Invoice Scan out',
+      subject: 'Diopark App - Invoice Scan Out',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-          <h1 style="color: #333;">Invoice Scan In Diopark</h1>
+          <h1 style="color: #333;">Invoice Scan Out Diopark</h1>
           <p style="font-size: 16px;">Nama               : ${pengguna.nama}</p>
           <p style="font-size: 16px;">Nomor Polisi       : ${pengguna.nomor_polisi}</p>
           <p style="font-size: 16px;">Detail Kendaraan   : ${pengguna.detail_kendaraan}</p>
@@ -94,7 +95,6 @@ async function scanKeluarQRCode(req, res) {
         </div>
       `,
     });
-
 
     res.status(200).json(transaksi);
   } catch (error) {
