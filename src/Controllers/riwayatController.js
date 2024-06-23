@@ -1,5 +1,6 @@
 const Pengguna = require('../Models/pengguna');
 const Transaksi = require('../Models/transaksi');
+const moment = require('moment-timezone');
 
 exports.getRiwayatTransaksi = async (req, res) => {
     try {
@@ -26,8 +27,15 @@ exports.getRiwayatTransaksi = async (req, res) => {
             if (!transaksiSet.has(key)) {
                 transaksiSet.add(key);
                 uniqueTransaksi.push(transaksi);
+            } 
+        }
+
+        // Menghapus transaksi duplikat dari database
+        for (const transaksi of riwayatTransaksi) {
+            const key = `${transaksi.waktu_parkir}-${transaksi.status}`;
+            if (transaksiSet.has(key)) {
+                transaksiSet.delete(key);
             } else {
-                // Hapus transaksi duplikat dari database
                 await Transaksi.destroy({ where: { id_transaksi: transaksi.id_transaksi } });
             }
         }
