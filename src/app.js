@@ -25,7 +25,6 @@ const ticketRoutes = require('./Routes/ticket')
 const statisticRoutes = require('./Routes/statistic');
 const manageUserRoutes = require('./Routes/managePengguna');
 
-
 // Middleware
 const { authenticateToken } = require('./midleware/authMidleware');
 const checkProfileCompletion = require('./midleware/profileMidleware');
